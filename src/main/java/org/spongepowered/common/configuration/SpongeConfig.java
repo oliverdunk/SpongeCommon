@@ -689,6 +689,8 @@ public class SpongeConfig<T extends SpongeConfig.ConfigBase> {
         private boolean infiniteWaterSource = false;
         @Setting(value = WORLD_FLOWING_LAVA_DECAY, comment = "Lava behaves like vanilla water when source block is removed")
         private boolean flowingLavaDecay = false;
+        @Setting(value = "spawn-protection-radius", comment = "Radius in blocks around spawn to protect from being built in")
+        private int spawnProtectionRadius = 16;
 
         public boolean hasInfiniteWaterSource() {
             return this.infiniteWaterSource;
@@ -704,6 +706,14 @@ public class SpongeConfig<T extends SpongeConfig.ConfigBase> {
 
         public void setFlowingLavaDecay(boolean flowingLavaDecay) {
             this.flowingLavaDecay = flowingLavaDecay;
+        }
+
+        public int getSpawnProtectionRadius() {
+            return spawnProtectionRadius;
+        }
+
+        public void setSpawnProtectionRadius(int spawnProtectionRadius) {
+            this.spawnProtectionRadius = spawnProtectionRadius;
         }
     }
 

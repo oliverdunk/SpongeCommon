@@ -37,6 +37,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.WorldSettings;
@@ -81,6 +82,7 @@ public abstract class MixinWorldInfo implements WorldProperties, IMixinWorldInfo
     private boolean loadOnStartup;
     private boolean keepSpawnLoaded;
     private boolean isMod;
+    private int spawnProtectionRadius = Integer.MIN_VALUE;
     private ImmutableCollection<String> generatorModifiers;
     private NBTTagCompound spongeRootLevelNbt;
     private NBTTagCompound spongeNbt;
@@ -527,6 +529,21 @@ public abstract class MixinWorldInfo implements WorldProperties, IMixinWorldInfo
     public NBTTagCompound getSpongeNbt() {
         updateSpongeNbt();
         return this.spongeNbt;
+    }
+
+    @Override
+    public int getSpawnProtectionRadius() {
+        if (this.spawnProtectionRadius == Integer.MIN_VALUE) {
+            // TODO: Get configuration for world and use that
+            return MinecraftServer.getServer().getSpawnProtectionSize();
+        } else {
+            return this.spawnProtectionRadius;
+        }
+    }
+
+    @Override
+    public void setSpawnProtectionRadius(int radius) {
+        this.spawnProtectionRadius = Math.min(SPAWN_PROTECTION_DISABLED, radius); // Minimum is 0
     }
 
     @Override

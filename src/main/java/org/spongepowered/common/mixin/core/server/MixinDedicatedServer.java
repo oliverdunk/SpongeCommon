@@ -24,23 +24,20 @@
  */
 package org.spongepowered.common.mixin.core.server;
 
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.io.File;
-import java.net.Proxy;
-
 @Mixin(DedicatedServer.class)
-public abstract class MixinDedicatedServer extends MinecraftServer {
+public abstract class MixinDedicatedServer extends MixinMinecraftServer {
 
     @Shadow private boolean guiIsEnabled;
-
-    public MixinDedicatedServer(Proxy proxy, File workDir) {
-        super(proxy, workDir);
-    }
+    @Shadow public abstract int getSpawnProtectionSize();
 
     /**
      * @author Zidane
@@ -53,6 +50,24 @@ public abstract class MixinDedicatedServer extends MinecraftServer {
     public void setGuiEnabled() {
         //MinecraftServerGui.createServerGui(this);
         this.guiIsEnabled = false;
+    }
+
+    /**
+     * @author zml
+     *
+     * Purpose: Change spawn protection to take advantage of Sponge permissions. Rather than affecting only the default world like vanilla, this
+     * will apply to any world. Additionally, fire a spawn protection event
+     */
+    @Overwrite
+    public boolean isBlockProtected(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+        BlockPos spawnPoint = worldIn.getSpawnPoint();
+        int protectionRadius = ((org.spongepowered.api.world.World) worldIn).getProperties().getSpawnProtectionRadius();
+
+        if (protectionRadius > 0 && Math.max(Math.abs(pos.getX() - spawnPoint.getX()), Math.abs(pos.getZ() - spawnPoint.getZ())) <=
+                protectionRadius) {
+            return !((Player) playerIn).hasPermission("minecraft.spawn-protection.override");
+        }
+        return false;
     }
 
 }
