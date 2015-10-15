@@ -153,6 +153,7 @@ import org.spongepowered.api.util.persistence.InvalidDataException;
 import org.spongepowered.api.world.Chunk;
 import org.spongepowered.api.world.Dimension;
 import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.PlayerSimulator;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldBorder;
 import org.spongepowered.api.world.WorldCreationSettings;
@@ -204,6 +205,7 @@ import org.spongepowered.common.util.StaticMixinHelper;
 import org.spongepowered.common.util.VecHelper;
 import org.spongepowered.common.world.CaptureType;
 import org.spongepowered.common.world.DimensionManager;
+import org.spongepowered.common.world.PlayerSimulatorFactory;
 import org.spongepowered.common.world.SpongeChunkPreGenerate;
 import org.spongepowered.common.world.border.PlayerBorderListener;
 import org.spongepowered.common.world.extent.ExtentViewDownsize;
@@ -1999,6 +2001,11 @@ public abstract class MixinWorld implements World, IMixinWorld {
         for (Player player : getPlayers()) {
             player.clearTitle();
         }
+    }
+
+    @Override
+    public PlayerSimulator getPlayerSimulator() {
+        return PlayerSimulatorFactory.instance.getSimulator((WorldServer) (Object) this);
     }
 
     @SuppressWarnings("unchecked")
