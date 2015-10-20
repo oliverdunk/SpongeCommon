@@ -199,6 +199,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
         return MessageSinks.to(sources);
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
     public MessageSink getSinkForPlayer(EntityPlayerMP player) {
         Set<CommandSource> sources = new HashSet<CommandSource>();
@@ -216,6 +217,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
         return MessageSinks.to(sources);
     }
 
+    @Override
     public MessageSink getNonTeamSink() {
         Set<CommandSource> sources = new HashSet<CommandSource>();
 
