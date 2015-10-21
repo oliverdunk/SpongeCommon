@@ -24,12 +24,12 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.collections;
 
-import org.spongepowered.common.item.inventory.lens.impl.struct.LensHandle;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.common.item.inventory.lens.Lens;
 import org.spongepowered.common.item.inventory.lens.MutableLensCollection;
+import org.spongepowered.common.item.inventory.lens.impl.struct.LensHandle;
 
 import java.util.AbstractList;
 import java.util.ArrayList;

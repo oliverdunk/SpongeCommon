@@ -24,11 +24,10 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.slots;
 
-import net.minecraft.item.ItemStack;
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
-
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
 import org.spongepowered.common.item.inventory.adapter.impl.slots.SidedSlotAdapter;
 import org.spongepowered.common.item.inventory.lens.slots.SidedSlotLens;
 

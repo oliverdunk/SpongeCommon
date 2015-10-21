@@ -24,9 +24,10 @@
  */
 package org.spongepowered.common.item.inventory.lens.slots;
 
-import com.google.common.base.Predicate;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
+
+import java.util.function.Predicate;
 
 public interface FilteringSlotLens<TInventory, TStack> extends SlotLens<TInventory, TStack> {
     

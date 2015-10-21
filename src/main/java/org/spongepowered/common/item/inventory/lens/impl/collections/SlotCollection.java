@@ -24,16 +24,15 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.collections;
 
-import org.spongepowered.common.item.inventory.lens.slots.SlotLens;
-
-import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
-import org.spongepowered.common.item.inventory.lens.impl.slots.SlotLensImpl;
-import org.spongepowered.common.item.inventory.adapter.impl.SlotCollectionAdapter;
-import org.spongepowered.api.item.inventory.Slot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.Slot;
+import org.spongepowered.common.item.inventory.adapter.impl.SlotCollectionAdapter;
+import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
 import org.spongepowered.common.item.inventory.lens.SlotProvider;
+import org.spongepowered.common.item.inventory.lens.impl.slots.SlotLensImpl;
+import org.spongepowered.common.item.inventory.lens.slots.SlotLens;
 
 public class SlotCollection extends DynamicLensCollectionImpl implements SlotProvider<IInventory, ItemStack> {
     

@@ -24,9 +24,8 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.collections;
 
-import net.minecraft.item.ItemStack;
-
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.common.item.inventory.lens.DynamicLensCollection;
 import org.spongepowered.common.item.inventory.lens.Lens;

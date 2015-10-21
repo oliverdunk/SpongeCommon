@@ -24,10 +24,11 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl;
 
-import gnu.trove.set.hash.TIntHashSet;
-
 import gnu.trove.impl.unmodifiable.TUnmodifiableIntSet;
 import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
@@ -36,9 +37,6 @@ import org.spongepowered.common.item.inventory.lens.Lens;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 
 public class DefaultEmptyLens extends ObservableLens<IInventory, ItemStack> {

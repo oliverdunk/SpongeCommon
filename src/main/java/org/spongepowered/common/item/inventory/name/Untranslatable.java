@@ -24,11 +24,10 @@
  */
 package org.spongepowered.common.item.inventory.name;
 
-import java.util.Locale;
-
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.translation.Translation;
-import org.spongepowered.api.text.translation.Translatable;
+
+import java.util.Locale;
 
 
 /**

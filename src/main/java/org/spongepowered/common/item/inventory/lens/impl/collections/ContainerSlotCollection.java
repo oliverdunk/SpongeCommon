@@ -24,10 +24,10 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.collections;
 
-import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import static com.google.common.base.Preconditions.*;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

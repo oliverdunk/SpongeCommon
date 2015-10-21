@@ -24,19 +24,19 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.slots;
 
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.spongepowered.common.item.inventory.lens.slots.SlotLens;
-import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
-import org.spongepowered.common.item.inventory.lens.impl.MinecraftLens;
-import static com.google.common.base.Preconditions.*;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryProperty;
+import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
+import org.spongepowered.common.item.inventory.adapter.impl.slots.SlotAdapter;
 import org.spongepowered.common.item.inventory.lens.InvalidOrdinalException;
 import org.spongepowered.common.item.inventory.lens.Lens;
 import org.spongepowered.common.item.inventory.lens.SlotProvider;
+import org.spongepowered.common.item.inventory.lens.impl.MinecraftLens;
+import org.spongepowered.common.item.inventory.lens.slots.SlotLens;
 
 import java.util.Collection;
 import java.util.Collections;

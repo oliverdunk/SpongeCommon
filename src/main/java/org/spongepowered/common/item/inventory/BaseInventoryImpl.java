@@ -25,14 +25,14 @@
 package org.spongepowered.common.item.inventory;
 
 import com.google.common.collect.ImmutableList;
-import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult;
-import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult.Type;
-import org.spongepowered.common.item.inventory.struct.OperationResultDetailed;
-import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.EmptyInventory;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult;
+import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult.Type;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.common.item.inventory.observer.InventoryEventArgs;
+import org.spongepowered.common.item.inventory.struct.OperationResultDetailed;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 import org.spongepowered.common.util.observer.Observer;
 

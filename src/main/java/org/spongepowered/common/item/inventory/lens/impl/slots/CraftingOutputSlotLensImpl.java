@@ -24,15 +24,15 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.slots;
 
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
-
-import com.google.common.base.Predicate;
 import net.minecraft.inventory.IInventory;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
 import org.spongepowered.common.item.inventory.adapter.impl.slots.CraftingOutputAdapter;
 import org.spongepowered.common.item.inventory.lens.slots.CraftingOutputSlotLens;
+
+import java.util.function.Predicate;
 
 
 public class CraftingOutputSlotLensImpl extends OutputSlotLensImpl implements CraftingOutputSlotLens<IInventory, net.minecraft.item.ItemStack> {

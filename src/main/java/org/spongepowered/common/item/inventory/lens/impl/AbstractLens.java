@@ -24,7 +24,7 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;

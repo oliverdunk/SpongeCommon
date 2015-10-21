@@ -25,11 +25,10 @@
 package org.spongepowered.common.item.inventory.struct;
 
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult;
 
 import java.util.Collection;
 import java.util.Optional;
-
-import org.spongepowered.api.item.inventory.transaction.InventoryOperationResult;
 
 
 /**

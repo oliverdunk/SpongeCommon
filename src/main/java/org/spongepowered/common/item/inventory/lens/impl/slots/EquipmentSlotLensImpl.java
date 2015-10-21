@@ -24,16 +24,16 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.slots;
 
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
-
-import com.google.common.base.Predicate;
 import net.minecraft.inventory.IInventory;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
+import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
 import org.spongepowered.common.item.inventory.adapter.impl.slots.EquipmentSlotAdapter;
 import org.spongepowered.common.item.inventory.lens.slots.EquipmentSlotLens;
+
+import java.util.function.Predicate;
 
 
 public class EquipmentSlotLensImpl extends FilteringSlotLensImpl implements EquipmentSlotLens<IInventory, net.minecraft.item.ItemStack> {
