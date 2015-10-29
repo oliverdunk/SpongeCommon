@@ -37,6 +37,7 @@ import org.spongepowered.common.item.inventory.lens.Lens;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class DefaultEmptyLens extends ObservableLens<IInventory, ItemStack> {
@@ -85,12 +86,12 @@ public class DefaultEmptyLens extends ObservableLens<IInventory, ItemStack> {
     }
 
     @Override
-    public Collection<Lens<IInventory, ItemStack>> getChildren() {
+    public List<Lens<IInventory, ItemStack>> getChildren() {
         return Collections.<Lens<IInventory, ItemStack>>emptyList();
     }
 
     @Override
-    public Collection<Lens<IInventory, ItemStack>> getSpanningChildren() {
+    public List<Lens<IInventory, ItemStack>> getSpanningChildren() {
         return Collections.<Lens<IInventory, ItemStack>>emptyList();
     }
 
@@ -105,6 +106,11 @@ public class DefaultEmptyLens extends ObservableLens<IInventory, ItemStack> {
 
     @Override
     public Collection<InventoryProperty<?, ?>> getProperties(int index) {
+        return Collections.<InventoryProperty<?, ?>>emptyList();
+    }
+    
+    @Override
+    public Collection<InventoryProperty<?, ?>> getProperties(Lens<IInventory, ItemStack> child) {
         return Collections.<InventoryProperty<?, ?>>emptyList();
     }
 
@@ -126,6 +132,11 @@ public class DefaultEmptyLens extends ObservableLens<IInventory, ItemStack> {
     @Override
     public boolean hasSlot(int index) {
         return false;
+    }
+    
+    @Override
+    public Lens<IInventory, ItemStack> getParent() {
+        return null;
     }
 
     @Override

@@ -24,7 +24,7 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl.slots;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

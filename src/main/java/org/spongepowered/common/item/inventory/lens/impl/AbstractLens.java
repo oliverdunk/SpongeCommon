@@ -24,7 +24,7 @@
  */
 package org.spongepowered.common.item.inventory.lens.impl;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
@@ -35,6 +35,7 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.common.item.inventory.adapter.InvalidAdapterException;
 import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
+import org.spongepowered.common.item.inventory.lens.InvalidLensDefinitionException;
 import org.spongepowered.common.item.inventory.lens.Lens;
 import org.spongepowered.common.item.inventory.lens.MutableLensCollection;
 import org.spongepowered.common.item.inventory.lens.SlotProvider;
@@ -48,6 +49,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @SuppressWarnings("deprecation")
 public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TInventory, TStack> implements Observer<InventoryEventArgs> {
@@ -58,13 +60,15 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
     
     protected final int base;
     
-    protected int size;
-    
     protected final TIntSet availableSlots = new TIntHashSet();
-   
+    
+    protected Lens<TInventory, TStack> parent; 
+    
     protected MutableLensCollection<TInventory, TStack> children;
     
     protected List<LensHandle<TInventory, TStack>> spanningChildren;
+    
+    protected int size;
     
     private int maxOrdinal = 0;
     
@@ -78,17 +82,32 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
 
     @SuppressWarnings("unchecked")
     public AbstractLens(int base, int size, InventoryAdapter<TInventory, TStack> adapter, Class<? extends Inventory> adapterType, SlotProvider<TInventory, TStack> slots) {
+        checkArgument(base >= 0, "Invalid offset: %s", base);
+        checkArgument(size > 0, "Invalid size: %s", size);
+        
         this.base = base;
         this.size = size;
         this.adapterType = adapterType;
         this.adapter = adapter;
         
-        if (slots != null) {
-            this.init(slots);
-        } else if (adapter instanceof SlotProvider) {
-            this.init((SlotProvider<TInventory, TStack>) adapter);
+        this.prepare();
+        
+        try {
+            if (slots != null) {
+                this.init(slots);
+            } else if (adapter instanceof SlotProvider) {
+                this.init((SlotProvider<TInventory, TStack>) adapter);
+            }
+        } catch (NoSuchElementException ex) {
+            throw new InvalidLensDefinitionException("Invalid lens definition, the lens referenced slots which do not exist.", ex);
         }
     }
+
+    /**
+     * Called before {@link #init} but after assignments, concrete subclasses
+     * should initialise the child collections here. 
+     */
+    protected abstract void prepare();
 
     /**
      * Initialise children
@@ -98,6 +117,7 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
     protected abstract void init(SlotProvider<TInventory, TStack> slots);
     
     protected void addChild(Lens<TInventory, TStack> lens, InventoryProperty<?, ?>... properties) {
+        checkNotNull(lens, "Attempted to register a null lens");
         this.children.add(lens, properties);
         this.availableSlots.addAll(lens.getSlots());
         
@@ -114,6 +134,18 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
         this.spanningChildren.add(child);
         child.ordinal = this.maxOrdinal;
         this.maxOrdinal += lens.getSlots().size();
+        if (lens instanceof AbstractLens) {
+            ((AbstractLens<TInventory, TStack>) lens).setParent(this);
+        }
+    }
+    
+    protected void setParent(Lens<TInventory, TStack> parent) {
+        this.parent = parent;
+    }
+    
+    @Override
+    public Lens<TInventory, TStack> getParent() {
+        return this.parent;
     }
     
     @Override
@@ -189,12 +221,12 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
     }
     
     @Override
-    public Collection<Lens<TInventory, TStack>> getChildren() {
-        return Collections.unmodifiableCollection(this.children);
+    public List<Lens<TInventory, TStack>> getChildren() {
+        return Collections.<Lens<TInventory, TStack>>unmodifiableList(this.children);
     }
 
     @Override
-    public Collection<Lens<TInventory, TStack>> getSpanningChildren() {
+    public List<Lens<TInventory, TStack>> getSpanningChildren() {
         Builder<Lens<TInventory, TStack>> listBuilder = ImmutableList.<Lens<TInventory, TStack>>builder();
         for (LensHandle<TInventory, TStack> child : this.spanningChildren) {
             listBuilder.add(child.lens);
@@ -216,6 +248,15 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
     public Collection<InventoryProperty<?, ?>> getProperties(int index) {
         return this.children.getProperties(index);
     }
+    
+    @Override
+    public Collection<InventoryProperty<?, ?>> getProperties(Lens<TInventory, TStack> child) {
+        int index = this.children.indexOf(child);
+        if (index < 0) {
+            throw new NoSuchElementException("Specified child lens is not a direct descendant this lens");
+        }
+        return this.children.getProperties(index);
+    }
 
     @Override
     public boolean has(Lens<TInventory, TStack> lens) {
@@ -229,7 +270,7 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
 
     @Override
     public Iterator<Lens<TInventory, TStack>> iterator() {
-        return null;
+        return this.children.iterator();
     }
     
     @Override
@@ -246,5 +287,9 @@ public abstract class AbstractLens<TInventory, TStack> extends ObservableLens<TI
     public void invalidate(TInventory inv) {
         this.raise(new InventoryEventArgs(Type.LENS_INVALIDATED, this));
     }
-    
+
+    protected boolean checkOrdinal(int ordinal) {
+        return ordinal >= 0 && ordinal < this.size;
+    }
+
 }

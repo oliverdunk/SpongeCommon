@@ -22,16 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.item.inventory.lens;
+package org.spongepowered.common.item.inventory;
 
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
+import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.common.item.inventory.lens.Lens;
 
-/**
- * @param <TInventory>
- * @param <TStack>
- */
-public interface LensProvider<TInventory, TStack> {
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-    public abstract Lens<TInventory, TStack> getRootLens(TInventory inv, InventoryAdapter<TInventory, TStack> adapter);
+
+public class InventoryIterator<TInventory, TStack> implements Iterator<Inventory> {
     
+    protected final List<Lens<TInventory, TStack>> children;
+    
+    protected final TInventory inventory;
+    
+    protected int next = 0;
+
+    public InventoryIterator(Lens<TInventory, TStack> lens, TInventory inventory) {
+        this.children = lens.getChildren();
+        this.inventory = inventory;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return this.next < this.children.size();
+    }
+
+    @Override
+    public Inventory next() {
+        try {
+            return this.children.get(this.next++).getAdapter(this.inventory);
+        } catch (IndexOutOfBoundsException e) {
+            throw new NoSuchElementException();
+        }
+    }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

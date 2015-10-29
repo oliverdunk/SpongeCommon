@@ -30,8 +30,11 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
 import org.spongepowered.common.item.inventory.lens.Lens;
 import org.spongepowered.common.item.inventory.lens.SlotProvider;
+import org.spongepowered.common.item.inventory.lens.impl.collections.MutableLensCollectionImpl;
+import org.spongepowered.common.item.inventory.lens.impl.struct.LensHandle;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 
 
 public abstract class MinecraftLens extends AbstractLens<IInventory, ItemStack> {
@@ -43,11 +46,21 @@ public abstract class MinecraftLens extends AbstractLens<IInventory, ItemStack> 
     public MinecraftLens(int base, int size, InventoryAdapter<IInventory, ItemStack> adapter, SlotProvider<IInventory, ItemStack> slots) {
         super(base, size, adapter, slots);
     }
+
+    @Override
+    protected final void prepare() {
+        this.children = new MutableLensCollectionImpl(this.size);
+        this.spanningChildren = new ArrayList<LensHandle<IInventory, ItemStack>>();
+    }
     
     @SuppressWarnings("unchecked")
     @Override
     protected Constructor<InventoryAdapter<IInventory, ItemStack>> getAdapterCtor() throws NoSuchMethodException {
-        return (Constructor<InventoryAdapter<IInventory, ItemStack>>) this.adapterType.getConstructor(IInventory.class, Lens.class);
+        try {
+            return (Constructor<InventoryAdapter<IInventory, ItemStack>>) this.adapterType.getConstructor(IInventory.class, this.getClass());
+        } catch (Exception ex) {
+            return (Constructor<InventoryAdapter<IInventory, ItemStack>>) this.adapterType.getConstructor(IInventory.class, Lens.class);
+        }
     }
 
     @Override

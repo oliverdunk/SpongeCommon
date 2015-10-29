@@ -26,10 +26,11 @@ package org.spongepowered.common.item.inventory.lens;
 
 import gnu.trove.set.TIntSet;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.InventoryProperty;
 import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
-import org.spongepowered.common.item.inventory.lens.slots.SlotLens;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Base Lens interface. A lens presents an indexed view of a number of child
@@ -47,6 +48,11 @@ import java.util.Collection;
  * @param <TStack>
  */
 public interface Lens<TInventory, TStack> extends LensCollection<TInventory, TStack> {
+    
+    /**
+     * Returns the <em>primary</em> parent lens of this lens. Can be null. 
+     */
+    public abstract Lens<TInventory, TStack> getParent();
     
     /**
      * Get the corresponding adapter type for this lens
@@ -120,15 +126,24 @@ public interface Lens<TInventory, TStack> extends LensCollection<TInventory, TSt
      * 
      * @return
      */
-    public abstract Collection<Lens<TInventory, TStack>> getChildren();
+    public abstract List<Lens<TInventory, TStack>> getChildren();
     
     /**
      * Get child lenses of this lens
      * 
      * @return
      */
-    public abstract Collection<Lens<TInventory, TStack>> getSpanningChildren();
+    public abstract List<Lens<TInventory, TStack>> getSpanningChildren();
     
+    /**
+     * Get properties for the specified child via this lens
+     * 
+     * @param child child lens to inspect
+     * @return collection of properties for the specified child when viewed
+     *      through this lens
+     */
+    public abstract Collection<InventoryProperty<?, ?>> getProperties(Lens<TInventory, TStack> child);
+
     /**
      * Set the stack at the specified offset 
      * 

@@ -24,14 +24,16 @@
  */
 package org.spongepowered.common.item.inventory.lens;
 
-import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
+public class InvalidLensDefinitionException extends RuntimeException {
 
-/**
- * @param <TInventory>
- * @param <TStack>
- */
-public interface LensProvider<TInventory, TStack> {
+    private static final long serialVersionUID = 1L;
+    
+    public InvalidLensDefinitionException(String message) {
+        super(message);
+    }
 
-    public abstract Lens<TInventory, TStack> getRootLens(TInventory inv, InventoryAdapter<TInventory, TStack> adapter);
+    public InvalidLensDefinitionException(String message, Throwable cause) {
+        super(message, cause);
+    }
     
 }

@@ -27,6 +27,7 @@ package org.spongepowered.common.item.inventory.lens;
 import org.spongepowered.api.item.inventory.InventoryProperty;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * A type of Lens collection whose members are fully mutable and also supports
@@ -35,7 +36,7 @@ import java.util.Collection;
  * @param <TInventory>
  * @param <TStack>
  */
-public interface MutableLensCollection<TInventory, TStack> extends Collection<Lens<TInventory, TStack>>, DynamicLensCollection<TInventory, TStack> {
+public interface MutableLensCollection<TInventory, TStack> extends List<Lens<TInventory, TStack>>, DynamicLensCollection<TInventory, TStack> {
     
     public abstract void add(Lens<TInventory, TStack> lens, InventoryProperty<?, ?>... properties);
 

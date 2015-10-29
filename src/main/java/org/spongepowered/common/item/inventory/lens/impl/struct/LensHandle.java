@@ -65,6 +65,7 @@ public final class LensHandle<TInventory, TStack> {
     
     /**
      * Create a lens handle containing the specified lens, and define the
+     * supplied properties
      * 
      * @param lens
      * @param properties
@@ -79,11 +80,41 @@ public final class LensHandle<TInventory, TStack> {
         }
     }
 
+    /**
+     * Create a lens handle containing the specified lens, and define the
+     * supplied properties
+     * 
+     * @param lens
+     * @param properties
+     */
+    public LensHandle(Lens<TInventory, TStack> lens, Collection<InventoryProperty<?, ?>> properties) {
+        this.lens = lens;
+        if (properties != null && properties.size() > 0) {
+            this.properties = new ArrayList<InventoryProperty<?, ?>>(properties);
+        }
+    }
+    
     public Collection<InventoryProperty<?, ?>> getProperties() {
         if (this.properties == null) {
             return Collections.<InventoryProperty<?, ?>>emptyList();
         }
         return Collections.unmodifiableCollection(this.properties);
+    }
+
+    public <T, K, V> InventoryProperty<K, V> getProperty(Class<T> property) {
+        return this.getProperty(property, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public <T, K, V> InventoryProperty<K, V> getProperty(Class<T> property, Object key) {
+        if (this.properties != null) {
+            for (InventoryProperty<?, ?> prop : this.properties) {
+                if (prop.getClass().equals(prop) && (key == null || key.equals(prop.getKey()))) {
+                    return (InventoryProperty<K, V>) prop;
+                }
+            }
+        }        
+        return null;
     }
 
     public void setProperty(InventoryProperty<?, ?> property) {

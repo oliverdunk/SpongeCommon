@@ -27,6 +27,7 @@ package org.spongepowered.common.item.inventory.lens.impl;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.api.item.inventory.Inventory;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.common.item.inventory.adapter.InventoryAdapter;
 import org.spongepowered.common.item.inventory.lens.SlotProvider;
 
@@ -44,7 +45,7 @@ public class DefaultIndexedLens extends MinecraftLens {
     @Override
     protected void init(SlotProvider<IInventory, ItemStack> slots) {
         for (int slot = 0; slot < this.size; slot++) {
-            this.children.add(slots.getSlot(slot));
+            this.addSpanningChild(slots.getSlot(slot), new SlotIndex(slot));
         }
     }
     
