@@ -157,6 +157,7 @@ public final class CommonModuleRegistry {
         factoryRegistries.add(new SelectorFactoryModule());
         factoryRegistries.add(new TextFactoryModule());
         factoryRegistries.add(new TimingsFactoryModule());
+        factoryRegistries.add(new PlayerSimulatorFactoryModule());
 
         try {
             Field modifierField = Field.class.getDeclaredField("modifiers");

@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.world;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.EnumPacketDirection;
@@ -38,10 +37,11 @@ import net.minecraft.stats.StatBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldServer;
+import org.spongepowered.api.profile.GameProfile;
 
 import java.util.Set;
-import java.util.UUID;
 
+// Based on Forge's FakePlayer
 public class SimulatedPlayer extends EntityPlayerMP {
 
     public static class FakeNetHandler extends NetHandlerPlayServer {
@@ -73,10 +73,8 @@ public class SimulatedPlayer extends EntityPlayerMP {
         }
     }
 
-    public static final GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes("SimulatedPlayer".getBytes()), "SimulatedPlayer");
-
-    public SimulatedPlayer(WorldServer world) {
-        super(MinecraftServer.getServer(), world, profile, new ItemInWorldManager(world));
+    public SimulatedPlayer(WorldServer world, GameProfile profile) {
+        super(MinecraftServer.getServer(), world, (com.mojang.authlib.GameProfile) profile, new ItemInWorldManager(world));
         this.playerNetServerHandler = new FakeNetHandler(this);
     }
 

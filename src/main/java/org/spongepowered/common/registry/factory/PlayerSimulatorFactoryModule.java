@@ -22,30 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.world;
+package org.spongepowered.common.registry.factory;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.WorldServer;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.world.PlayerSimulator;
+import org.spongepowered.common.registry.FactoryRegistry;
+import org.spongepowered.common.world.PlayerSimulatorFactory;
 
 import java.util.function.Function;
 
-public class PlayerSimulatorFactory implements Function<GameProfile, PlayerSimulator> {
+public class PlayerSimulatorFactoryModule implements FactoryRegistry<Function<GameProfile, PlayerSimulator>, PlayerSimulator.Factory> {
 
-    static PlayerSimulatorFactory instance;
-
-    public PlayerSimulatorFactory() {
-        instance = this;
+    @Override
+    public Class<PlayerSimulator.Factory> getFactoryOwner() {
+        return PlayerSimulator.Factory.class;
     }
 
     @Override
-    public PlayerSimulator apply(GameProfile t) {
-        return new SpongePlayerSimulator(t);
-    }
-
-    protected EntityPlayerMP createPlayer(WorldServer world, GameProfile profile) {
-        return new SimulatedPlayer(world, profile);
+    public Function<GameProfile, PlayerSimulator> provideFactory() {
+        return new PlayerSimulatorFactory();
     }
 
 }
