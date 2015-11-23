@@ -35,10 +35,10 @@ import org.spongepowered.common.util.GuavaJavaUtils;
 import java.util.function.Predicate;
 
 public final class SpongeAvoidEntityAIBuilder implements AvoidEntityAITask.Builder {
-    Predicate<Entity> targetSelector;
+    Predicate<? extends Entity> targetSelector;
     float searchDistance;
     double closeRangeSpeed, farRangeSpeed;
-    
+
     @Override
     public AvoidEntityAITask.Builder targetSelector(Predicate<Entity> predicate) {
         this.targetSelector = predicate;
@@ -72,10 +72,13 @@ public final class SpongeAvoidEntityAIBuilder implements AvoidEntityAITask.Build
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AvoidEntityAITask build(Creature owner) {
         Preconditions.checkNotNull(owner);
         Preconditions.checkNotNull(targetSelector);
-        return (AvoidEntityAITask) new EntityAIAvoidEntity((EntityCreature) owner, GuavaJavaUtils.asGuavaPredicate(targetSelector), searchDistance,
-                closeRangeSpeed, farRangeSpeed);
+        return (AvoidEntityAITask) new EntityAIAvoidEntity((EntityCreature) owner, Entity.class,
+                GuavaJavaUtils.asGuavaPredicate((Predicate) targetSelector),
+                searchDistance, closeRangeSpeed, farRangeSpeed);
     }
+
 }

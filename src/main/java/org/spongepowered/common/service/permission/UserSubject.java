@@ -68,7 +68,8 @@ public class UserSubject extends SpongeSubject {
                     opLevel = ((OpLevelCollection.OpLevelSubject) parent).getOpLevel();
                 }
                 if (opLevel > 0) {
-                    SpongePermissionService.getOps().addEntry(new UserListOpsEntry(player, opLevel));
+                    // TODO: What is the boolean param for?
+                    SpongePermissionService.getOps().addEntry(new UserListOpsEntry(player, opLevel, false));
                 } else {
                     SpongePermissionService.getOps().removeEntry(player);
                 }

@@ -87,7 +87,7 @@ public class DisplayNameDataProcessor extends AbstractSpongeDataProcessor<Displa
             }
         } else if (dataHolder instanceof IWorldNameable) {
             if (((IWorldNameable) dataHolder).hasCustomName()) {
-                final String customName = ((IWorldNameable) dataHolder).getCommandSenderName();
+                final String customName = ((IWorldNameable) dataHolder).getName();
                 final DisplayNameData data = new SpongeDisplayNameData(Texts.legacy().fromUnchecked(customName));
                 return Optional.of(data);
             }

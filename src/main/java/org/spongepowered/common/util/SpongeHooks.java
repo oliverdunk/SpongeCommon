@@ -132,7 +132,7 @@ public class SpongeHooks {
             return;
         }
 
-        String spawnName = entity.getCommandSenderName();
+        String spawnName = entity.getName();
         if (entity instanceof EntityItem) {
             spawnName = ((EntityItem) entity).getEntityItem().getDisplayName();
         }
@@ -460,7 +460,7 @@ public class SpongeHooks {
         }
         else if (rootCause instanceof Entity) {
             Entity causeEntity = (Entity) rootCause;
-            causedBy = causeEntity.getCommandSenderName();
+            causedBy = causeEntity.getName();
         }else if (rootCause instanceof BlockSnapshot) {
             BlockSnapshot snapshot = (BlockSnapshot) rootCause;
             causedBy = snapshot.getState().getType().getId();

@@ -68,8 +68,10 @@ public class SpongeWatchClosestAIBuilder implements WatchClosestAITask.Builder {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public WatchClosestAITask build(Agent owner) {
         Preconditions.checkNotNull(this.watchedClass);
-        return (WatchClosestAITask) new EntityAIWatchClosest((EntityLiving) owner, watchedClass, this.maxDistance, this.chance);
+        return (WatchClosestAITask) new EntityAIWatchClosest((EntityLiving) owner,
+                (Class<? extends net.minecraft.entity.Entity>) watchedClass, this.maxDistance, this.chance);
     }
 }

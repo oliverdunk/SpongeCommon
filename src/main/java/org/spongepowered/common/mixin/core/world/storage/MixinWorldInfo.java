@@ -408,7 +408,7 @@ public abstract class MixinWorldInfo implements WorldProperties, IMixinWorldInfo
     @Override
     public Optional<String> getGameRule(String gameRule) {
         if (this.theGameRules.hasRule(gameRule)) {
-            return Optional.of(this.theGameRules.getGameRuleStringValue(gameRule));
+            return Optional.of(this.theGameRules.getString(gameRule));
         }
         return Optional.empty();
     }
@@ -417,7 +417,7 @@ public abstract class MixinWorldInfo implements WorldProperties, IMixinWorldInfo
     public Map<String, String> getGameRules() {
         ImmutableMap.Builder<String, String> ruleMap = ImmutableMap.builder();
         for (String rule : this.theGameRules.getRules()) {
-            ruleMap.put(rule, this.theGameRules.getGameRuleStringValue(rule));
+            ruleMap.put(rule, this.theGameRules.getString(rule));
         }
         return ruleMap.build();
     }

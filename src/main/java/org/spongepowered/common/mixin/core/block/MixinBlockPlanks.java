@@ -72,6 +72,6 @@ public abstract class MixinBlockPlanks extends MixinBlock {
     }
 
     private ImmutableTreeData getTreeTypeFor(IBlockState blockState) {
-        return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeTreeData.class, (TreeType) blockState.getValue(BlockPlanks.VARIANT));
+        return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeTreeData.class, (TreeType) (Object) blockState.getValue(BlockPlanks.VARIANT));
     }
 }

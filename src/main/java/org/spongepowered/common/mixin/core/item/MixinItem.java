@@ -68,7 +68,7 @@ public abstract class MixinItem implements ItemType, IMixinItem {
         if ((Object) this == ItemTypeRegistryModule.NONE_ITEM) {
             return "NONE";
         }
-        return Item.itemRegistry.getNameForObject(this).toString();
+        return Item.itemRegistry.getNameForObject((Item) (Object) this).toString();
     }
 
     @Override

@@ -292,7 +292,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     @Override
     public void reset() {
         float experience = 0;
-        boolean keepInventory = this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory");
+        boolean keepInventory = this.worldObj.getGameRules().getBoolean("keepInventory");
 
         if (this.keepsLevel || keepInventory) {
             experience = this.experience;

@@ -36,6 +36,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.sink.MessageSink;
 import org.spongepowered.api.text.sink.MessageSinks;
 import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
+import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.common.interfaces.IMixinCommandSender;
 import org.spongepowered.common.interfaces.IMixinCommandSource;
@@ -47,13 +50,14 @@ import java.util.Optional;
 
 @Mixin(value = {EntityPlayerMP.class, TileEntityCommandBlock.class, EntityMinecartCommandBlock.class, MinecraftServer.class, RConConsoleSource.class},
         targets = IMixinCommandSender.SIGN_CLICK_SENDER)
+@Implements(@Interface(iface = CommandSource.class, prefix = "commandSource$"))
 public abstract class MixinCommandSource implements IMixinCommandSource, CommandSource {
 
     private MessageSink sink = SpongeMessageSinkFactory.TO_ALL;
 
-    @Override
-    public String getName() {
-        return this.asICommandSender().getCommandSenderName();
+    @Intrinsic
+    public String commandSource$getName() {
+        return this.asICommandSender().getName();
     }
 
     @Override
@@ -80,7 +84,7 @@ public abstract class MixinCommandSource implements IMixinCommandSource, Command
         CommandSource source = this;
         if (source instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP)(Object) this;
-            if (player.worldObj.getGameRules().getGameRuleBooleanValue("showDeathMessages")) {
+            if (player.worldObj.getGameRules().getBoolean("showDeathMessages")) {
                 Team team = player.getTeam();
 
                 if (team != null && team.getDeathMessageVisibility() != Team.EnumVisible.ALWAYS) {

@@ -25,6 +25,7 @@
 package org.spongepowered.common.entity.ai;
 
 import com.google.common.base.Preconditions;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import org.spongepowered.api.entity.ai.task.builtin.creature.AttackLivingAITask;
@@ -63,9 +64,10 @@ public final class SpongeAttackLivingAIBuilder implements AttackLivingAITask.Bui
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AttackLivingAITask build(Creature owner) {
         Preconditions.checkNotNull(owner);
         Preconditions.checkNotNull(targetClass);
-        return (AttackLivingAITask) new EntityAIAttackOnCollide((EntityCreature) owner, targetClass, speed, longMemory);
+        return (AttackLivingAITask) new EntityAIAttackOnCollide((EntityCreature) owner, (Class<? extends Entity>) targetClass, speed, longMemory);
     }
 }

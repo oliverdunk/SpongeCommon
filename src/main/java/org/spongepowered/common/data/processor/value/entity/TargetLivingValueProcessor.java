@@ -51,8 +51,9 @@ public class TargetLivingValueProcessor extends AbstractSpongeValueProcessor<Ent
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected boolean set(EntityLiving container, Living value) {
-        if (!supports(container) || !container.canAttackClass(value.getClass())) {
+        if (!supports(container) || !container.canAttackClass((Class<? extends EntityLivingBase>) value.getClass())) {
             return false;
         }
 

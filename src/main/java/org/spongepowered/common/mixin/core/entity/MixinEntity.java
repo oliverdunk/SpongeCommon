@@ -102,6 +102,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -507,7 +508,7 @@ public abstract class MixinEntity implements Entity, IMixinEntity {
         if (((Entity) this) instanceof EntityPlayerMP) {
             // Force an update, this also set the rotation in this entity
             ((EntityPlayerMP) (Entity) this).playerNetServerHandler.setPlayerLocation(getPosition().getX(), getPosition().getY(),
-                getPosition().getZ(), (float) rotation.getY(), (float) rotation.getX(), EnumSet.noneOf(RelativePositions.class));
+                getPosition().getZ(), (float) rotation.getY(), (float) rotation.getX(), (Set) EnumSet.noneOf(RelativePositions.class));
         } else {
             // Let the entity tracker do its job, this just updates the variables
             shadow$setRotation((float) rotation.getY(), (float) rotation.getX());

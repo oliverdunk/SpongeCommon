@@ -54,8 +54,9 @@ public class TargetLivingDataProcessor extends AbstractEntitySingleDataProcessor
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     protected boolean set(EntityLiving entity, Living value) {
-        if (!supports(entity) || !entity.canAttackClass(value.getClass())) {
+        if (!supports(entity) || !entity.canAttackClass((Class<? extends EntityLivingBase>) value.getClass())) {
             return false;
         }
         entity.setAttackTarget((EntityLivingBase) value);

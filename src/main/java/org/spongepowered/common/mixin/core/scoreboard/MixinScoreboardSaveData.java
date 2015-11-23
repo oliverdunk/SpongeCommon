@@ -88,7 +88,7 @@ public abstract class MixinScoreboardSaveData extends WorldSavedData implements 
 
     @SuppressWarnings("deprecation")
     @Inject(method = "readScores", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getValueFromObjective(Ljava/lang/String;Lnet/minecraft/scoreboard/ScoreObjective;)Lnet/minecraft/scoreboard/Score;"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onAfterSetLocked(NBTTagList nbt, CallbackInfo ci, int i, NBTTagCompound nbttagcompound, ScoreObjective objective) {
+    public void onAfterSetLocked(NBTTagList nbt, CallbackInfo ci, int i, NBTTagCompound nbttagcompound, ScoreObjective objective, String s) {
         if (nbttagcompound.hasKey(SPONGE_SCORE_UUID_LEAST)) {
             UUID uuid = new UUID(nbttagcompound.getLong(SPONGE_SCORE_UUID_MOST), nbttagcompound.getLong(SPONGE_SCORE_UUID_LEAST));
             SpongeScore spongeScore = this.scoreMap.get(uuid);
@@ -112,13 +112,14 @@ public abstract class MixinScoreboardSaveData extends WorldSavedData implements 
     }
 
     @SuppressWarnings("rawtypes")
-    @Inject(method = "scoresToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Score;isLocked()Z"), locals = LocalCapture.CAPTURE_FAILHARD)
-    public void onScoresToNbt(CallbackInfoReturnable<NBTTagList> cir, NBTTagList nbttaglist, Collection collection, Iterator iterator, Score score, NBTTagCompound nbttagcompound) {
-        SpongeScore spongeScore = ((IMixinScore) score).getSpongeScore();
+    @Inject(method = "scoresToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Score;isLocked()Z"),
+            locals = LocalCapture.CAPTURE_FAILHARD)
+    public void onScoresToNbt(CallbackInfoReturnable<NBTTagList> cir, NBTTagList nbttaglist) {
+        /*SpongeScore spongeScore = ((IMixinScore) score).getSpongeScore();
         if (spongeScore.getObjectives().size() > 1) {
-            nbttagcompound.setLong(SPONGE_SCORE_UUID_MOST, spongeScore.getUuid().getMostSignificantBits());
-            nbttagcompound.setLong(SPONGE_SCORE_UUID_LEAST, spongeScore.getUuid().getLeastSignificantBits());
-        }
+            /*nbttagcompound.setLong(SPONGE_SCORE_UUID_MOST, spongeScore.getUuid().getMostSignificantBits());
+            nbttagcompound.setLong(SPONGE_SCORE_UUID_LEAST, spongeScore.getUuid().getLeastSignificantBits());*/
+        //}*/
     }
 
 }

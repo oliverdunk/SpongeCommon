@@ -202,7 +202,7 @@ public abstract class MixinMinecraftServer implements Server, ConsoleSource, IMi
         if (getConfigurationManager() == null || getConfigurationManager().playerEntityList == null) {
             return ImmutableList.of();
         }
-        return ImmutableList.copyOf((List<Player>) getConfigurationManager().playerEntityList);
+        return ImmutableList.copyOf((List<Player>) (List) getConfigurationManager().playerEntityList);
     }
 
     @Override
