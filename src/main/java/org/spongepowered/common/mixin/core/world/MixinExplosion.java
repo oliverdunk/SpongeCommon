@@ -26,6 +26,7 @@ package org.spongepowered.common.mixin.core.world;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import org.spongepowered.api.entity.explosive.Explosive;
 import org.spongepowered.api.world.World;
@@ -53,8 +54,7 @@ public abstract class MixinExplosion implements Explosion {
     @Shadow public double explosionZ;
     @Shadow public Entity exploder;
     @Shadow public float explosionSize;
-    @SuppressWarnings("rawtypes")
-    @Shadow public List affectedBlockPositions;
+    @Shadow public List<BlockPos> affectedBlockPositions;
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     public void onConstructed(net.minecraft.world.World world, Entity entity, double originX, double originY,

@@ -1668,7 +1668,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
         checkNotNull(position, "The position cannot be null");
         checkArgument(radius > 0, "The radius has to be greater then zero!");
 
-        List<Packet> packets = SpongeParticleHelper.toPackets((SpongeParticleEffect) particleEffect, position);
+        List<Packet<?>> packets = SpongeParticleHelper.toPackets((SpongeParticleEffect) particleEffect, position);
 
         if (!packets.isEmpty()) {
             ServerConfigurationManager manager = MinecraftServer.getServer().getConfigurationManager();
@@ -1788,7 +1788,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
         return Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Iterable<Chunk> getLoadedChunks() {
         return (Iterable<Chunk>) (Iterable) ((ChunkProviderServer) this.getChunkProvider()).loadedChunks;

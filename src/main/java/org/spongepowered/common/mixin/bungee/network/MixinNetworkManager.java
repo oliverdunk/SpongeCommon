@@ -27,6 +27,7 @@ package org.spongepowered.common.mixin.bungee.network;
 import com.mojang.authlib.properties.Property;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.common.interfaces.IMixinNetworkManager;
@@ -34,9 +35,8 @@ import org.spongepowered.common.interfaces.IMixinNetworkManager;
 import java.net.SocketAddress;
 import java.util.UUID;
 
-@SuppressWarnings("rawtypes")
 @Mixin(NetworkManager.class)
-public abstract class MixinNetworkManager extends SimpleChannelInboundHandler implements IMixinNetworkManager {
+public abstract class MixinNetworkManager extends SimpleChannelInboundHandler<Packet<?>> implements IMixinNetworkManager {
 
     @Shadow private SocketAddress socketAddress;
 

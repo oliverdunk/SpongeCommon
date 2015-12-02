@@ -464,7 +464,7 @@ public class SpongeCommonEventFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static CollideEntityEvent callCollideEntityEvent(net.minecraft.world.World world, net.minecraft.entity.Entity sourceEntity, List<net.minecraft.entity.Entity> entities) {
+    public static CollideEntityEvent callCollideEntityEvent(net.minecraft.world.World world, net.minecraft.entity.Entity sourceEntity, List<? extends net.minecraft.entity.Entity> entities) {
         Cause cause = null;
         if (sourceEntity != null) {
             cause = Cause.of(NamedCause.source(sourceEntity));

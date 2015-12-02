@@ -65,8 +65,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
     @Shadow public Team.EnumVisible nameTagVisibility;
     @Shadow public Team.EnumVisible deathMessageVisibility;
     @Shadow public Set<String> membershipSet;
-    @SuppressWarnings("rawtypes")
-    @Shadow public abstract Collection getMembershipCollection();
+    @Shadow public abstract Collection<String> getMembershipCollection();
 
     private SpongeTeam spongeTeam;
 
@@ -182,15 +181,14 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
                 && this.spongeTeam.allowRecursion;
     }
 
-    @SuppressWarnings("rawtypes")
     public MessageSink getSink() {
         Set<CommandSource> sources = new HashSet<>();
 
-        Collection collection = getMembershipCollection();
-        Iterator iterator = collection.iterator();
+        Collection<String> collection = getMembershipCollection();
+        Iterator<String> iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            String s = (String)iterator.next();
+            String s = iterator.next();
             EntityPlayerMP teamPlayer = MinecraftServer.getServer().getConfigurationManager().getPlayerByUsername(s);
             if (teamPlayer != null) {
                 sources.add((Player) teamPlayer);
@@ -199,16 +197,15 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
         return MessageSinks.to(sources);
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
     public MessageSink getSinkForPlayer(EntityPlayerMP player) {
         Set<CommandSource> sources = new HashSet<>();
 
-        Collection collection = getMembershipCollection();
-        Iterator iterator = collection.iterator();
+        Collection<String> collection = getMembershipCollection();
+        Iterator<String> iterator = collection.iterator();
 
         while (iterator.hasNext()) {
-            String s = (String)iterator.next();
+            String s = iterator.next();
             EntityPlayerMP teamPlayer = player.mcServer.getConfigurationManager().getPlayerByUsername(s);
             if (teamPlayer != null && player != teamPlayer) {
                 sources.add((Player) teamPlayer);
@@ -222,9 +219,9 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
         Set<CommandSource> sources = new HashSet<>();
 
         for (int i = 0; i < MinecraftServer.getServer().getConfigurationManager().playerEntityList.size(); ++i) {
-            EntityPlayerMP player = (EntityPlayerMP)MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(i);
+            EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(i);
 
-            if (player.getTeam() != (Team)(Object)this) {
+            if (player.getTeam() != (Team) (Object) this) {
                 sources.add((Player) player);
             }
         }

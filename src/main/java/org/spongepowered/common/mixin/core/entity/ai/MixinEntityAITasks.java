@@ -53,8 +53,8 @@ import java.util.List;
 @Mixin(EntityAITasks.class)
 @Implements(value = @Interface(iface = Goal.class, prefix = "goal$"))
 public abstract class MixinEntityAITasks implements IMixinEntityAITasks {
-    @Shadow private List taskEntries;
-    @Shadow private List executingTaskEntries;
+    @Shadow private List<EntityAITasks.EntityAITaskEntry> taskEntries;
+    @Shadow private List<EntityAITasks.EntityAITaskEntry> executingTaskEntries;
     private EntityLiving owner;
     private GoalType type;
 

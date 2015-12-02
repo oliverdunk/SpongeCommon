@@ -157,8 +157,7 @@ public abstract class MixinServerCommandManager extends CommandHandler implement
      * Reasoning: All commands should go through one system -- we need none of the MC handling code
      */
     @Override
-    @SuppressWarnings("rawtypes")
-    public List getTabCompletionOptions(ICommandSender sender, String input, BlockPos pos) {
+    public List<String> getTabCompletionOptions(ICommandSender sender, String input, BlockPos pos) {
         CommandManager service = SpongeImpl.getGame().getCommandManager();
         CommandSource source = (CommandSource) sender;
         return service.getSuggestions(source, input);

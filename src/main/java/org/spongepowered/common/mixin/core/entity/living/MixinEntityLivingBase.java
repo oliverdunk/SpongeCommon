@@ -71,7 +71,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-@SuppressWarnings("rawtypes")
 @NonnullByDefault
 @Mixin(value = EntityLivingBase.class, priority = 999)
 public abstract class MixinEntityLivingBase extends MixinEntity implements Living, IMixinEntityLivingBase {
@@ -105,7 +104,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity implements Livin
     @Shadow public abstract boolean isPotionActive(Potion potion);
     @Shadow public abstract float getHealth();
     @Shadow public abstract float getMaxHealth();
-    @Shadow public abstract Collection getActivePotionEffects();
+    @Shadow public abstract Collection<net.minecraft.potion.PotionEffect> getActivePotionEffects();
     @Shadow public abstract EntityLivingBase getLastAttacker();
     @Shadow public abstract IAttributeInstance getEntityAttribute(IAttribute attribute);
     @Shadow public abstract ItemStack getEquipmentInSlot(int slotIn);

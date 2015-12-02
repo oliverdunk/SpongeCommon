@@ -70,9 +70,7 @@ import javax.annotation.Nullable;
 @Mixin(net.minecraft.block.state.BlockState.StateImplementation.class)
 public abstract class MixinBlockState extends BlockStateBase implements BlockState, IMixinBlockState {
 
-    @Shadow
-    @SuppressWarnings("rawtypes")
-    private ImmutableMap properties;
+    @Shadow private ImmutableMap<IProperty<?>, Comparable<?>> properties;
     @Shadow private Block block;
 
     private ImmutableSet<ImmutableValue<?>> values;

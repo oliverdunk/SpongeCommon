@@ -111,7 +111,6 @@ public abstract class MixinScoreboardSaveData extends WorldSavedData implements 
         return scoreboard.getValueFromObjective(name, objective);
     }
 
-    @SuppressWarnings("rawtypes")
     @Inject(method = "scoresToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Score;isLocked()Z"),
             locals = LocalCapture.CAPTURE_FAILHARD)
     public void onScoresToNbt(CallbackInfoReturnable<NBTTagList> cir, NBTTagList nbttaglist) {

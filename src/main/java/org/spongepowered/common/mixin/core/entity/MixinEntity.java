@@ -382,7 +382,7 @@ public abstract class MixinEntity implements Entity, IMixinEntity {
         setLocationAndRotation(location, rotation, relativePositions, false);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("unchecked")
     public boolean setLocationAndRotation(Location<World> location, Vector3d rotation, EnumSet<RelativePositions> relativePositions, boolean forced) {
         boolean relocated = true;
 
@@ -393,7 +393,7 @@ public abstract class MixinEntity implements Entity, IMixinEntity {
         } else {
             if (((Entity) this) instanceof EntityPlayerMP) {
                 // Players use different logic, as they support real relative movement.
-                EnumSet relativeFlags = EnumSet.noneOf(S08PacketPlayerPosLook.EnumFlags.class);
+                EnumSet<S08PacketPlayerPosLook.EnumFlags> relativeFlags = EnumSet.noneOf(S08PacketPlayerPosLook.EnumFlags.class);
 
                 if (relativePositions.contains(RelativePositions.X)) {
                     relativeFlags.add(S08PacketPlayerPosLook.EnumFlags.X);

@@ -115,8 +115,7 @@ public abstract class MixinServerConfigurationManager {
     @Shadow private MinecraftServer mcServer;
     @Shadow private IPlayerFileData playerNBTManagerObj;
     @Shadow public Map<UUID, EntityPlayerMP> uuidToPlayerMap;
-    @SuppressWarnings("rawtypes")
-    @Shadow public List playerEntityList;
+    @Shadow public List<EntityPlayerMP> playerEntityList;
     @Shadow protected abstract void sendScoreboard(ServerScoreboard scoreboardIn, EntityPlayerMP playerIn);
     @Shadow public abstract NBTTagCompound readPlayerDataFromFile(EntityPlayerMP playerIn);
     @Shadow public abstract void setPlayerGameTypeBasedOnOther(EntityPlayerMP p_72381_1_, EntityPlayerMP p_72381_2_, net.minecraft.world.World worldIn);

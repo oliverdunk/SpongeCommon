@@ -37,16 +37,14 @@ import java.util.Collection;
 @Mixin(value = PropertyBool.class)
 public abstract class MixinPropertyBoolean extends MixinPropertyHelper<Boolean> implements BooleanTrait {
 
-    @SuppressWarnings("rawtypes")
-    @Shadow 
-    public abstract Collection getAllowedValues();
+    @Shadow
+    public abstract Collection<Boolean> getAllowedValues();
 
     @Inject(method = "<init>", at = @At("RETURN"))
     public void onConstructed(String name, CallbackInfo ci) {
         this.propertyName = name;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<Boolean> getPossibleValues() {
         return getAllowedValues();

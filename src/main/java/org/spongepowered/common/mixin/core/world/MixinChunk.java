@@ -124,7 +124,7 @@ public abstract class MixinChunk implements Chunk, IMixinChunk {
     @Shadow private ExtendedBlockStorage[] storageArrays;
     @Shadow private int[] precipitationHeightMap;
     @Shadow private int[] heightMap;
-    @Shadow private ClassInheritanceMultiMap[] entityLists;
+    @Shadow private ClassInheritanceMultiMap<Entity>[] entityLists;
     @Shadow private Map<BlockPos, TileEntity> chunkTileEntityMap;
 
     @Shadow public abstract TileEntity getTileEntity(BlockPos pos, EnumCreateEntityType p_177424_2_);
@@ -342,13 +342,13 @@ public abstract class MixinChunk implements Chunk, IMixinChunk {
         } else if (event.isCancelled()) {
             listToFill.clear();
         } else {
-            listToFill = (List<net.minecraft.entity.Entity>)(List<?>) event.getEntities();
+            listToFill = (List<net.minecraft.entity.Entity>) (List<?>) event.getEntities();
         }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Inject(method = "getEntitiesOfTypeWithinAAAB", at = @At(value = "RETURN"))
-    public void onGetEntitiesOfTypeWithinAAAB(Class<? extends Entity> entityClass, AxisAlignedBB aabb, List listToFill, Predicate<Entity> p_177430_4_, CallbackInfo ci) {
+    public <T extends Entity> void onGetEntitiesOfTypeWithinAAAB(Class<T> entityClass, AxisAlignedBB aabb, List<T> listToFill, Predicate<Entity> p_177430_4_, CallbackInfo ci) {
         if (this.worldObj.isRemote) {
             return;
         }
@@ -363,7 +363,7 @@ public abstract class MixinChunk implements Chunk, IMixinChunk {
         } else if (event.isCancelled()) {
             listToFill.clear();
         } else {
-            listToFill = (List<net.minecraft.entity.Entity>)(List<?>) event.getEntities();
+            listToFill = (List<T>) (List<?>) event.getEntities();
         }
     }
 
@@ -666,12 +666,12 @@ public abstract class MixinChunk implements Chunk, IMixinChunk {
         return new BlockPos(x, y, z);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public Collection<org.spongepowered.api.entity.Entity> getEntities() {
         Set<org.spongepowered.api.entity.Entity> entities = Sets.newHashSet();
-        for (ClassInheritanceMultiMap entityList : this.entityLists) {
-            entities.addAll(entityList);
+        for (ClassInheritanceMultiMap<Entity> entityList : this.entityLists) {
+            entities.addAll((ClassInheritanceMultiMap<org.spongepowered.api.entity.Entity>) (ClassInheritanceMultiMap) entityList);
         }
         return entities;
     }

@@ -92,9 +92,9 @@ public abstract class MixinTileEntity implements TileEntity, IMixinTileEntity {
         }
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("unchecked")
     @Inject(method = "addMapping(Ljava/lang/Class;Ljava/lang/String;)V", at = @At(value = "RETURN"))
-    private static void onRegister(Class clazz, String name, CallbackInfo callbackInfo) {
+    private static void onRegister(Class<? extends net.minecraft.tileentity.TileEntity> clazz, String name, CallbackInfo callbackInfo) {
         final String id = TileEntityTypeRegistryModule.getInstance().getIdForName(name);
         final TileEntityType tileEntityType = new SpongeTileEntityType((Class<? extends TileEntity>) clazz, name, id);
         SpongeImpl.getRegistry().registerAdditionalType(TileEntityType.class, tileEntityType);

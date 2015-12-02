@@ -60,10 +60,8 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
 
     private boolean echoToSponge = true;
 
-    @SuppressWarnings("rawtypes")
-    @Shadow public abstract Collection getTeams();
-    @SuppressWarnings("rawtypes")
-    @Shadow public abstract Collection getScoreObjectives();
+    @Shadow public abstract Collection<ScorePlayerTeam> getTeams();
+    @Shadow public abstract Collection<ScoreObjective> getScoreObjectives();
 
     @Override
     public void setSpongeScoreboard(SpongeScoreboard scoreboard) {

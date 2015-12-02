@@ -54,12 +54,8 @@ public abstract class MixinContainer implements org.spongepowered.api.item.inven
     @Shadow public int windowId;
     @Shadow protected List<ICrafting> crafters;
 
-    @SuppressWarnings("rawtypes")
-    @Shadow
-    public abstract List getInventory();
-
-    @Shadow
-    public abstract Slot getSlot(int slotId);
+    @Shadow public abstract List<ItemStack> getInventory();
+    @Shadow public abstract Slot getSlot(int slotId);
 
     /**
      * @author bloodmc

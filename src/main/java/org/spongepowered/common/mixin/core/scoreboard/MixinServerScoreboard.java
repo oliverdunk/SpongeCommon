@@ -52,7 +52,7 @@ public abstract class MixinServerScoreboard extends MixinScoreboard implements I
 
     private List<EntityPlayerMP> players = new ArrayList<>();
 
-    private void sendToPlayers(Packet packet) {
+    private void sendToPlayers(Packet<?> packet) {
         for (EntityPlayerMP player: this.players) {
             player.playerNetServerHandler.sendPacket(packet);
         }
@@ -81,79 +81,77 @@ public abstract class MixinServerScoreboard extends MixinScoreboard implements I
 
     @SuppressWarnings("unchecked")
     void removeTeams(EntityPlayerMP player) {
-        for (ScorePlayerTeam team: (Collection<ScorePlayerTeam>) this.getTeams()) {
+        for (ScorePlayerTeam team : this.getTeams()) {
             player.playerNetServerHandler.sendPacket(new S3EPacketTeams(team, 1));
         }
     }
 
     @SuppressWarnings("unchecked")
     void removeObjectives(EntityPlayerMP player) {
-        for (ScoreObjective objective: (Collection<ScoreObjective>) this.getScoreObjectives()) {
+        for (ScoreObjective objective : this.getScoreObjectives()) {
             player.playerNetServerHandler.sendPacket(new S3BPacketScoreboardObjective(objective, 1));
         }
     }
 
     @Redirect(method = "func_96536_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onUpdateScoreValue(ServerConfigurationManager manager, Packet packet) {
+    public void onUpdateScoreValue(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "func_96516_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onRemoveScore(ServerConfigurationManager manager, Packet packet) {
+    public void onRemoveScore(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "func_178820_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onRemoveScoreForObjective(ServerConfigurationManager manager, Packet packet) {
+    public void onRemoveScoreForObjective(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "setObjectiveInDisplaySlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onSetObjectiveInDisplaySlot(ServerConfigurationManager manager, Packet packet) {
+    public void onSetObjectiveInDisplaySlot(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "addPlayerToTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onAddPlayerToTeam(ServerConfigurationManager manager, Packet packet) {
+    public void onAddPlayerToTeam(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "removePlayerFromTeam", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onRemovePlayerFromTeam(ServerConfigurationManager manager, Packet packet) {
+    public void onRemovePlayerFromTeam(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "func_96532_b", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onUpdateObjective(ServerConfigurationManager manager, Packet packet) {
+    public void onUpdateObjective(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "broadcastTeamCreated", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onBroadcastTeamCreated(ServerConfigurationManager manager, Packet packet) {
+    public void onBroadcastTeamCreated(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "sendTeamUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onSendTeamUpdate(ServerConfigurationManager manager, Packet packet) {
+    public void onSendTeamUpdate(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
     @Redirect(method = "func_96513_c", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
-    public void onRemoveTeam(ServerConfigurationManager manager, Packet packet) {
+    public void onRemoveTeam(ServerConfigurationManager manager, Packet<?> packet) {
         this.sendToPlayers(packet);
     }
 
-    @SuppressWarnings("rawtypes")
     @Redirect(method = "func_96549_e", at = @At(value = "INVOKE", target = "Ljava/util/List;iterator()Ljava/util/Iterator;", ordinal = 0, remap =
             false))
-    public Iterator onGetPlayerIteratorForObjectives(List list) {
+    public Iterator<EntityPlayerMP> onGetPlayerIteratorForObjectives(List list) {
         return this.players.iterator();
     }
 
-    @SuppressWarnings("rawtypes")
     @Redirect(method = "getPlayerIterator", at = @At(value = "INVOKE", target = "Ljava/util/List;iterator()Ljava/util/Iterator;", ordinal = 0, remap =
             false))
-    public Iterator onGetPlayerIterator(List list) {
+    public Iterator<EntityPlayerMP> onGetPlayerIterator(List list) {
         return this.players.iterator();
     }
 }

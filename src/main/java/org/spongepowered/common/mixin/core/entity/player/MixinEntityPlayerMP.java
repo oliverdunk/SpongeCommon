@@ -38,6 +38,7 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S29PacketSoundEffect;
 import net.minecraft.network.play.server.S48PacketResourcePackSend;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
+import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -127,20 +128,17 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Redirect(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/scoreboard/Scoreboard;getObjectivesFromCriteria(Lnet/minecraft/scoreboard/IScoreObjectiveCriteria;)Ljava/util/Collection;"))
-    public Collection onGetObjectivesFromCriteria(net.minecraft.scoreboard.Scoreboard this$0, IScoreObjectiveCriteria criteria) {
+    public Collection<ScoreObjective> onGetObjectivesFromCriteria(net.minecraft.scoreboard.Scoreboard this$0, IScoreObjectiveCriteria criteria) {
         return this.getWorldScoreboard().getObjectivesFromCriteria(criteria);
     }
 
-    @SuppressWarnings("unchecked")
     @Inject(method = "onDeath", at = @At(value = "RETURN"))
     public void onPlayerDeath(DamageSource damageSource, CallbackInfo ci) {
         IMixinWorld world = (IMixinWorld) this.worldObj;
         // Special case for players as sometimes tick capturing won't capture deaths
         if (world.getCapturedEntityItems().size() > 0) {
-            world.handleDroppedItems(Cause.of(NamedCause.source(this), NamedCause.of("Attacker", damageSource)),
-                (List<org.spongepowered.api.entity.Entity>) (List<?>) world.getCapturedEntityItems(), null, true);
+            world.handleDroppedItems(Cause.of(NamedCause.source(this), NamedCause.of("Attacker", damageSource)), world.getCapturedEntityItems(), null, true);
         }
     }
 
@@ -229,7 +227,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
         checkNotNull(position, "The position cannot be null");
         checkArgument(radius > 0, "The radius has to be greater then zero!");
 
-        List<Packet> packets = SpongeParticleHelper.toPackets((SpongeParticleEffect) particleEffect, position);
+        List<Packet<?>> packets = SpongeParticleHelper.toPackets((SpongeParticleEffect) particleEffect, position);
 
         if (!packets.isEmpty()) {
             if (position.sub(this.posX, this.posY, this.posZ).lengthSquared() < (long) radius * (long) radius) {
