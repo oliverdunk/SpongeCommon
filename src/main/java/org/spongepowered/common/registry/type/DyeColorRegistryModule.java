@@ -69,7 +69,7 @@ public final class DyeColorRegistryModule implements CatalogRegistryModule<DyeCo
     @AdditionalRegistration
     public void registerAdditional() {
         for (EnumDyeColor dyeColor : EnumDyeColor.values()) {
-            if (!this.dyeColorMappings.containsValue((DyeColor) (Object) dyeColor)) {
+            if (!this.dyeColorMappings.containsValue((Object) dyeColor)) {
                 this.dyeColorMappings.put(dyeColor.getName().toLowerCase(), (DyeColor) (Object) dyeColor);
             }
         }

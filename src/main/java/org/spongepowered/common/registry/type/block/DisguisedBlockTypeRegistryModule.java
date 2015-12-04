@@ -42,12 +42,12 @@ public final class DisguisedBlockTypeRegistryModule implements CatalogRegistryMo
 
     @RegisterCatalog(DisguisedBlockTypes.class)
     private final Map<String, DisguisedBlockType> disguisedBlockTypeMappings = new ImmutableMap.Builder<String, DisguisedBlockType>()
-        .put("stone", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.STONE)
-        .put("cobblestone", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.COBBLESTONE)
-        .put("stonebrick", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.STONEBRICK)
-        .put("mossy_stonebrick", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.MOSSY_STONEBRICK)
-        .put("cracked_stonebrick", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.CRACKED_STONEBRICK)
-        .put("chiseled_stonebrick", (DisguisedBlockType) (Object) BlockSilverfish.EnumType.CHISELED_STONEBRICK)
+        .put("stone", (DisguisedBlockType) BlockSilverfish.EnumType.STONE)
+        .put("cobblestone", (DisguisedBlockType) BlockSilverfish.EnumType.COBBLESTONE)
+        .put("stonebrick", (DisguisedBlockType) BlockSilverfish.EnumType.STONEBRICK)
+        .put("mossy_stonebrick", (DisguisedBlockType) BlockSilverfish.EnumType.MOSSY_STONEBRICK)
+        .put("cracked_stonebrick", (DisguisedBlockType) BlockSilverfish.EnumType.CRACKED_STONEBRICK)
+        .put("chiseled_stonebrick", (DisguisedBlockType) BlockSilverfish.EnumType.CHISELED_STONEBRICK)
         .build();
 
     @Override

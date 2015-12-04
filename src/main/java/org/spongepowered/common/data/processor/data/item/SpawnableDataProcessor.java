@@ -51,8 +51,8 @@ public class SpawnableDataProcessor extends AbstractItemSingleDataProcessor<Enti
 
     @Override
     public boolean set(ItemStack itemStack, EntityType value) {
-        final String name = (String) EntityList.classToStringMapping.get(value.getEntityClass());
-        final int id = (int) EntityList.stringToIDMapping.get(name);
+        final String name = EntityList.classToStringMapping.get(value.getEntityClass());
+        final int id = EntityList.stringToIDMapping.get(name);
         if(EntityList.entityEggs.containsKey(id)) {
             itemStack.setItemDamage(id);
             return true;

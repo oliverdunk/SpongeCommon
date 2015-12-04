@@ -132,10 +132,10 @@ public abstract class MixinBlockTripWire extends MixinBlock {
 
     private ImmutableConnectedDirectionData getConnectedDirectionData(IBlockState blockState) {
         final Set<Direction> directions = new HashSet<>();
-        final Boolean north = (Boolean) blockState.getValue(BlockTripWire.NORTH);
-        final Boolean east = (Boolean) blockState.getValue(BlockTripWire.EAST);
-        final Boolean west = (Boolean) blockState.getValue(BlockTripWire.WEST);
-        final Boolean south = (Boolean) blockState.getValue(BlockTripWire.SOUTH);
+        final Boolean north = blockState.getValue(BlockTripWire.NORTH);
+        final Boolean east = blockState.getValue(BlockTripWire.EAST);
+        final Boolean west = blockState.getValue(BlockTripWire.WEST);
+        final Boolean south = blockState.getValue(BlockTripWire.SOUTH);
         if (north) {
             directions.add(Direction.NORTH);
         }

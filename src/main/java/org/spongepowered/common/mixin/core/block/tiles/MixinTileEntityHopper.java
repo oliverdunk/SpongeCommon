@@ -57,7 +57,7 @@ public abstract class MixinTileEntityHopper extends MixinTileEntityLockable impl
     /**
      * @author bloodmc - November 15th, 2015
      *
-     * Purpose: Used to track when an item is thrown into the world and sucked 
+     * Purpose: Used to track when an item is thrown into the world and sucked
      * into a hopper.
      */
     @Overwrite
@@ -80,7 +80,7 @@ public abstract class MixinTileEntityHopper extends MixinTileEntityLockable impl
             }
             // Sponge end
             ItemStack itemstack = entityItem.getEntityItem().copy();
-            ItemStack itemstack1 = TileEntityHopper.putStackInInventoryAllSlots(source, itemstack, (EnumFacing)null);
+            ItemStack itemstack1 = TileEntityHopper.putStackInInventoryAllSlots(source, itemstack, null);
 
             if (itemstack1 != null && itemstack1.stackSize != 0) {
                 entityItem.setEntityItemStack(itemstack1);

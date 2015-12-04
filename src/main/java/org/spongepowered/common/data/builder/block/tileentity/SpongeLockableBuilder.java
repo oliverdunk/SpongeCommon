@@ -63,7 +63,7 @@ public class SpongeLockableBuilder<T extends TileEntityCarrier> extends Abstract
             ((IInventory) lockable).setInventorySlotContents(content.getInt(new DataQuery("Slot")).get(), stack);
         }
         if (container.contains(Keys.LOCK_TOKEN.getQuery())) {
-            ((DataHolder) lockable).offer(Keys.LOCK_TOKEN, container.getString(Keys.LOCK_TOKEN.getQuery()).get());
+            lockable.offer(Keys.LOCK_TOKEN, container.getString(Keys.LOCK_TOKEN.getQuery()).get());
         }
         return Optional.of((T) lockable);
     }

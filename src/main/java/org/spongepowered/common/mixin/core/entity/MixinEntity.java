@@ -325,7 +325,7 @@ public abstract class MixinEntity implements Entity, IMixinEntity {
         ArrayDeque<net.minecraft.entity.Entity> passengers = new ArrayDeque<>();
         while (passenger != null) {
             if (passenger instanceof EntityPlayerMP && !this.worldObj.isRemote) {
-                ((EntityPlayerMP) passenger).mountEntity(null);
+                passenger.mountEntity(null);
             }
             net.minecraft.entity.Entity nextPassenger = null;
             if (passenger.riddenByEntity != null) {

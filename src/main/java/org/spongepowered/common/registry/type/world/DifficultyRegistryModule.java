@@ -65,7 +65,7 @@ public final class DifficultyRegistryModule implements CatalogRegistryModule<Dif
     @AdditionalRegistration
     public void additional() {
         for (EnumDifficulty difficulty : EnumDifficulty.values()) {
-            if (!this.difficultyMappings.containsValue((Difficulty) (Object) difficulty)) {
+            if (!this.difficultyMappings.containsValue((Object) difficulty)) {
                 this.difficultyMappings.put(difficulty.name(), (Difficulty) (Object) difficulty);
             }
         }

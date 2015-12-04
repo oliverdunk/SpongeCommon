@@ -122,7 +122,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity implements Livin
     }
 
     public void damageD(double amount) {
-        Living thisEntity = (Living) this;
+        Living thisEntity = this;
         DamageSource source = DamageSource.generic;
         if (thisEntity instanceof Humanoid) {
             source = DamageSource.causePlayerDamage((EntityPlayer) thisEntity);
@@ -142,7 +142,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity implements Livin
     }
 
     public void setHealthD(double health) {
-        Living thisEntity = (Living) this;
+        Living thisEntity = this;
         setHealth((float) health);
 
         if (thisEntity instanceof EntityPlayer && health == 0) {
@@ -196,7 +196,7 @@ public abstract class MixinEntityLivingBase extends MixinEntity implements Livin
     }
 
     public Vector3d getEyeLocation() {
-        return ((Living) this).getLocation().getPosition().add(0, getEyeHeight(), 0);
+        return this.getLocation().getPosition().add(0, getEyeHeight(), 0);
     }
 
     public int getRemainingAir() {

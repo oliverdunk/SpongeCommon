@@ -106,7 +106,7 @@ public abstract class MixinBlockCactus extends MixinBlock {
     }
 
     private ImmutableGrowthData getGrowthData(IBlockState blockState) {
-        return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeGrowthData.class, (Integer) blockState.getValue(BlockCactus.AGE), 0, 15);
+        return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeGrowthData.class, blockState.getValue(BlockCactus.AGE), 0, 15);
     }
 
 }

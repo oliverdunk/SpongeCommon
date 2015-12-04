@@ -76,6 +76,6 @@ public abstract class MixinBlockDispenser extends MixinBlock {
 
     private ImmutableDirectionalData getDirectionalData(IBlockState blockState) {
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeDirectionalData.class,
-                DirectionResolver.getFor((EnumFacing) blockState.getValue(BlockDispenser.FACING)));
+                DirectionResolver.getFor(blockState.getValue(BlockDispenser.FACING)));
     }
 }

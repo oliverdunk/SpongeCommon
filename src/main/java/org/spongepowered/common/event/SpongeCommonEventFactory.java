@@ -245,7 +245,7 @@ public class SpongeCommonEventFactory {
 
             // Restore cursor
             ItemStack cursor =
-                    ((ClickInventoryEvent) event).getCursorTransaction().getOriginal() == ItemStackSnapshot.NONE ? null
+                    event.getCursorTransaction().getOriginal() == ItemStackSnapshot.NONE ? null
                             : (net.minecraft.item.ItemStack) ((ClickInventoryEvent) event).getCursorTransaction().getOriginal()
                                     .createStack();
             player.inventory.setItemStack(cursor);
@@ -276,9 +276,9 @@ public class SpongeCommonEventFactory {
             }
 
             // Custom cursor
-            if (((ClickInventoryEvent) event).getCursorTransaction().getCustom().isPresent()) {
+            if (event.getCursorTransaction().getCustom().isPresent()) {
                 ItemStack cursor =
-                        ((ClickInventoryEvent) event).getCursorTransaction().getFinal() == ItemStackSnapshot.NONE ? null
+                        event.getCursorTransaction().getFinal() == ItemStackSnapshot.NONE ? null
                                 : (net.minecraft.item.ItemStack) ((ClickInventoryEvent) event).getCursorTransaction().getFinal()
                                         .createStack();
                 player.inventory.setItemStack(cursor);
@@ -483,8 +483,9 @@ public class SpongeCommonEventFactory {
             }
         }
 
-        ImmutableList<org.spongepowered.api.entity.Entity> originalEntities = ImmutableList.copyOf((List<org.spongepowered.api.entity.Entity>)(List<?>) entities);
-        CollideEntityEvent event = SpongeEventFactory.createCollideEntityEvent(cause, originalEntities, (List<org.spongepowered.api.entity.Entity>)(List<?>) entities, (org.spongepowered.api.world.World) world);
+        ImmutableList<org.spongepowered.api.entity.Entity> originalEntities = ImmutableList.copyOf((List) entities);
+        CollideEntityEvent event = SpongeEventFactory.createCollideEntityEvent(cause, originalEntities, (List) entities,
+                (org.spongepowered.api.world.World) world);
         SpongeImpl.postEvent(event);
         return event;
     }
@@ -499,7 +500,7 @@ public class SpongeCommonEventFactory {
                 EnumFacing notifiedSide = (EnumFacing) obj;
                 BlockPos offset = pos.offset(notifiedSide);
                 Direction direction = DirectionFacingProvider.getInstance().getKey(notifiedSide).get();
-                Location<World> location = new Location<World>((World) world, VecHelper.toVector(offset));
+                Location<World> location = new Location<World>(world, VecHelper.toVector(offset));
                 if (location.getBlockY() >=0 && location.getBlockY() <= 255) {
                     neighbors.put(direction, location.getBlock());
                 }

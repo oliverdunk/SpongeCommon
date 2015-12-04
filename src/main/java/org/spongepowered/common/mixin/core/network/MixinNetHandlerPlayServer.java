@@ -249,7 +249,7 @@ public abstract class MixinNetHandlerPlayServer implements PlayerConnection {
                             commandblocklogic.setTrackOutput(flag);
 
                             if (!flag) {
-                                commandblocklogic.setLastOutput((IChatComponent) null);
+                                commandblocklogic.setLastOutput(null);
                             }
 
                             commandblocklogic.updateCommand();

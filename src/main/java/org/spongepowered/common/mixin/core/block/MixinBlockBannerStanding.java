@@ -44,7 +44,7 @@ import java.util.Optional;
 public abstract class MixinBlockBannerStanding extends MixinBlockBanner {
 
     private ImmutableDirectionalData getDirectionalData(IBlockState blockState) {
-        final int intDir = (Integer) (Object) blockState.getValue(BlockBannerStanding.ROTATION);
+        final int intDir = blockState.getValue(BlockBannerStanding.ROTATION);
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeDirectionalData.class, Direction.values()[(intDir + 8) % 16]);
     }
 

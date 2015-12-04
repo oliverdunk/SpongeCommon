@@ -86,13 +86,13 @@ public abstract class MixinContainer implements org.spongepowered.api.item.inven
      * Purpose: All player inventory changes that need to be synced to
      * client flow through this method. Overwrite is used as no mod
      * should be touching this method.
-     * 
+     *
      */
     @Overwrite
     public void detectAndSendChanges() {
         for (int i = 0; i < this.inventorySlots.size(); ++i) {
-            ItemStack itemstack = ((Slot) this.inventorySlots.get(i)).getStack();
-            ItemStack itemstack1 = (ItemStack) this.inventoryItemStacks.get(i);
+            ItemStack itemstack = this.inventorySlots.get(i).getStack();
+            ItemStack itemstack1 = this.inventoryItemStacks.get(i);
 
             if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
                 if (this.captureInventory) {
@@ -109,7 +109,7 @@ public abstract class MixinContainer implements org.spongepowered.api.item.inven
                 this.inventoryItemStacks.set(i, itemstack1);
 
                 for (int j = 0; j < this.crafters.size(); ++j) {
-                    ((ICrafting) this.crafters.get(j)).sendSlotContents((Container) (Object) this, i, itemstack1);
+                    this.crafters.get(j).sendSlotContents((Container) (Object) this, i, itemstack1);
                 }
             }
         }

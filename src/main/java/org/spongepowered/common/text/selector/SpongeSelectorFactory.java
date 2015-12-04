@@ -252,7 +252,7 @@ public class SpongeSelectorFactory implements SelectorFactory {
         Set<Argument<T>> set = Sets.newLinkedHashSet();
         if (type instanceof SpongeArgumentHolder.SpongeVector3) {
             Set<Function<V, T>> extractors =
-                    ((SpongeArgumentHolder.SpongeVector3<V, T>) (Object) type)
+                    ((SpongeArgumentHolder.SpongeVector3<V, T>) type)
                             .extractFunctions();
             Set<? extends ArgumentType<T>> types = type.getTypes();
             Iterator<Function<V, T>> extIter = extractors.iterator();

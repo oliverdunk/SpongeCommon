@@ -124,7 +124,7 @@ public final class PopulatorTypeRegistryModule implements ExtraClassCatalogRegis
                 // remove old mapping
                 this.populatorTypeMappings.remove(fieldName.toLowerCase());
                 // add new mapping with minecraft id
-                this.populatorTypeMappings.put(((SpongePopulatorType) populatorType).getId(), populatorType);
+                this.populatorTypeMappings.put(populatorType.getId(), populatorType);
             } else {
                 SpongeImpl.getLogger().error("A populator is null at the moment! Populator: " + fieldName);
             }

@@ -92,7 +92,7 @@ public class SpongeScore implements Score {
     @SuppressWarnings({"deprecation", "unchecked"})
     public void addToScoreObjective(ScoreObjective scoreObjective) {
         Map<ScoreObjective, net.minecraft.scoreboard.Score> scoreMap =
-                (Map<ScoreObjective, net.minecraft.scoreboard.Score>) scoreObjective.theScoreboard.entitiesScoreObjectives.get(this.name);
+                scoreObjective.theScoreboard.entitiesScoreObjectives.get(this.name);
         if (scoreMap == null) {
             scoreMap = Maps.newHashMap();
         }

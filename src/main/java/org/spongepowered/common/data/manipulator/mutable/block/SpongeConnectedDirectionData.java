@@ -54,7 +54,7 @@ public class SpongeConnectedDirectionData extends AbstractData<ConnectedDirectio
     }
 
     public SpongeConnectedDirectionData() {
-    	this(ImmutableSet.<Direction>of(Direction.NONE));
+    	this(ImmutableSet.of(Direction.NONE));
     }
 
     @Override

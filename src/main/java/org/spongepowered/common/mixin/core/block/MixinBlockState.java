@@ -94,7 +94,7 @@ public abstract class MixinBlockState extends BlockStateBase implements BlockSta
         if (supports(key)) {
             final Cycleable value = (Cycleable) get((Key) key).get();
             final Cycleable next = value.cycleNext();
-            return with((Key<? extends BaseValue<Object>>) (Object) key, next).get();
+            return with((Key<? extends BaseValue<Object>>) (Key) key, next).get();
         }
         throw new IllegalArgumentException("Used an invalid cyclable key! Check with supports in the future!");
     }
@@ -373,7 +373,7 @@ public abstract class MixinBlockState extends BlockStateBase implements BlockSta
         if (!this.properties.containsKey(property)) {
             return Optional.empty();
         } else {
-            return Optional.of((T) (Comparable<T>) property.getValueClass().cast(this.properties.get(property)));
+            return Optional.of((T) property.getValueClass().cast(this.properties.get(property)));
         }
     }
 

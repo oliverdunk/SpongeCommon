@@ -44,7 +44,7 @@ import java.util.Optional;
 public abstract class MixinBlockSponge extends MixinBlock {
 
     private ImmutableWetData getWetData(IBlockState blockState) {
-        final boolean isWet = (Boolean) blockState.getValue(BlockSponge.WET);
+        final boolean isWet = blockState.getValue(BlockSponge.WET);
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeWetData.class, isWet);
     }
 

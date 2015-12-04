@@ -66,7 +66,7 @@ public final class GameModeRegistryModule implements CatalogRegistryModule<GameM
     @AdditionalRegistration
     public void registerAdditional() {
         for (WorldSettings.GameType gameType : WorldSettings.GameType.values()) {
-            if (!this.gameModeMappings.inverse().containsKey((GameMode) (Object) gameType)) {
+            if (!this.gameModeMappings.inverse().containsKey((Object) gameType)) {
                 this.gameModeMappings.put(gameType.getName().toLowerCase(), (GameMode) (Object) gameType);
             }
         }

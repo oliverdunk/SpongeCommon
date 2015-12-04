@@ -69,7 +69,7 @@ public final class PotionEffectTypeRegistryModule implements CatalogRegistryModu
                 this.potionEffectTypeMap.put(potion.getName().toLowerCase(), potionEffectType);
             }
         }
-        ((Map<ResourceLocation, Potion>) Potion.field_180150_I).entrySet().stream()
+        Potion.field_180150_I.entrySet().stream()
             .filter(entry -> !this.potionEffectTypeMap.containsKey(entry.getKey().getResourcePath().toLowerCase()))
             .forEach(entry -> {
                 this.potionList.add((PotionEffectType) entry.getValue());
@@ -89,7 +89,7 @@ public final class PotionEffectTypeRegistryModule implements CatalogRegistryModu
                 }
             }
         }
-        ((Map<ResourceLocation, Potion>) Potion.field_180150_I).entrySet().stream()
+        Potion.field_180150_I.entrySet().stream()
             .filter(entry -> !this.potionEffectTypeMap.containsKey(entry.getKey().getResourcePath().toLowerCase()))
             .forEach(entry -> {
                 this.potionList.add((PotionEffectType) entry.getValue());

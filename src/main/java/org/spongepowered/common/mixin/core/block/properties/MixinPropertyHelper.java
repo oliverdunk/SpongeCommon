@@ -52,9 +52,9 @@ public abstract class MixinPropertyHelper<T extends Comparable<T>> implements Bl
         return this.idString;
     }
 
-    @Override
-    public String getName() {
-        return this.name;
+    @Intrinsic
+    public String trait$getName() {
+        return getName();
     }
 
     @Intrinsic
@@ -71,4 +71,5 @@ public abstract class MixinPropertyHelper<T extends Comparable<T>> implements Bl
     public void setId(String id) {
         this.idString = id;
     }
+
 }

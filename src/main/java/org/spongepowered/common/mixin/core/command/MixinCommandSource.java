@@ -89,7 +89,7 @@ public abstract class MixinCommandSource implements IMixinCommandSource, Command
 
                 if (team != null && team.getDeathMessageVisibility() != Team.EnumVisible.ALWAYS) {
                     if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OTHER_TEAMS) {
-                        this.sink = ((IMixinTeam)team).getSinkForPlayer((EntityPlayerMP) player);
+                        this.sink = ((IMixinTeam)team).getSinkForPlayer(player);
                     } else if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OWN_TEAM) {
                         this.sink = ((IMixinTeam)team).getNonTeamSink();
                     }

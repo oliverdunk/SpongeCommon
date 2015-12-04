@@ -75,13 +75,13 @@ public abstract class MixinBlockRedSandstone extends MixinBlock {
 
     private ImmutableSandstoneData getSandstoneTypeFor(IBlockState blockState) {
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeSandstoneData.class,
-               convertType((EnumType) blockState.getValue(BlockRedSandstone.TYPE)));
+               convertType(blockState.getValue(BlockRedSandstone.TYPE)));
     }
-    
+
     private SandstoneType convertType(BlockRedSandstone.EnumType type){
         return (SandstoneType) (Object) BlockSandStone.EnumType.byMetadata(type.getMetadata());
     }
-    
+
     private BlockRedSandstone.EnumType convertType(BlockSandStone.EnumType type){
         return BlockRedSandstone.EnumType.byMetadata(type.getMetadata());
     }

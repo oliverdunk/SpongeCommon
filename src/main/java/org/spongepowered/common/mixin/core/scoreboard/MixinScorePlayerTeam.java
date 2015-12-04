@@ -221,7 +221,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
         for (int i = 0; i < MinecraftServer.getServer().getConfigurationManager().playerEntityList.size(); ++i) {
             EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(i);
 
-            if (player.getTeam() != (Team) (Object) this) {
+            if (player.getTeam() != (Object) this) {
                 sources.add((Player) player);
             }
         }

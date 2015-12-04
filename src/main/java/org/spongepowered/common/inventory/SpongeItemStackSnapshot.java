@@ -166,7 +166,7 @@ public class SpongeItemStackSnapshot implements ItemStackSnapshot {
         checkNotNull(containerClass);
         for (ImmutableDataManipulator<?, ?> manipulator : this.manipulators) {
             if (containerClass.isInstance(manipulator)) {
-                return Optional.of((T) (Object) manipulator);
+                return Optional.of((T) manipulator);
             }
         }
         return Optional.empty();
@@ -217,7 +217,7 @@ public class SpongeItemStackSnapshot implements ItemStackSnapshot {
 
     @Override
     public Optional<ItemStackSnapshot> with(BaseValue<?> value) {
-        return with((Key<BaseValue<Object>>) (Object) value.getKey(), (Object) value.get());
+        return with((Key<BaseValue<Object>>) value.getKey(), value.get());
     }
 
     @Override

@@ -64,7 +64,7 @@ public final class FishRegistryModule implements CatalogRegistryModule<Fish> {
     @AdditionalRegistration
     public void registerAdditional() {
         for (ItemFishFood.FishType fishType : ItemFishFood.FishType.values()) {
-            if (!this.fishMap.containsValue((Fish) (Object) fishType)) {
+            if (!this.fishMap.containsValue((Object) fishType)) {
                 this.fishMap.put(fishType.name().toLowerCase(), (Fish) (Object) fishType);
             }
         }

@@ -668,13 +668,11 @@ public abstract class MixinWorld implements World, IMixinWorld {
 
                 if (entityIn instanceof EntityItem) {
                     this.capturedEntityItems.add((Item) entityIn);
-                    event =
-                            SpongeEventFactory.createDropItemEventCustom(cause, (List<Entity>) (List<?>) this.capturedEntityItems,
-                                                                         entitySnapshotBuilder.build(), (World) (Object) this);
+                    event = SpongeEventFactory.createDropItemEventCustom(cause, (List) this.capturedEntityItems,
+                            entitySnapshotBuilder.build(), (World) this);
                 } else {
-                    event =
-                            SpongeEventFactory.createSpawnEntityEventCustom(cause, this.capturedEntities,
-                                                                            entitySnapshotBuilder.build(), (World) (Object) this);
+                    event = SpongeEventFactory.createSpawnEntityEventCustom(cause, this.capturedEntities,
+                            entitySnapshotBuilder.build(), (World) this);
                 }
                 SpongeImpl.postEvent(event);
 
@@ -854,7 +852,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
                         }
 
                         if (this.capturedEntityItems.size() > 0) {
-                            handleDroppedItems(cause, (List<Entity>) (List<?>) this.capturedEntityItems, invalidTransactions,
+                            handleDroppedItems(cause, (List<Entity>) this.capturedEntityItems, invalidTransactions,
                                     captureType == CaptureType.BREAK ? true : destructDrop);
                         }
 
@@ -927,7 +925,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
                 cause = StaticMixinHelper.dropCause;
                 destructDrop = true;
             }
-            handleDroppedItems(cause, (List<Entity>) (List<?>) this.capturedEntityItems, invalidTransactions, destructDrop);
+            handleDroppedItems(cause, (List<Entity>) this.capturedEntityItems, invalidTransactions, destructDrop);
         }
         if (this.capturedEntities.size() > 0) {
             handleEntitySpawns(cause, this.capturedEntities, invalidTransactions);
@@ -1001,9 +999,9 @@ public abstract class MixinWorld implements World, IMixinWorld {
         DropItemEvent event = null;
 
         if (destructItems) {
-            event = SpongeEventFactory.createDropItemEventDestruct(cause, entities, entitySnapshotBuilder.build(), (World) this);
+            event = SpongeEventFactory.createDropItemEventDestruct(cause, entities, entitySnapshotBuilder.build(), this);
         } else {
-            event = SpongeEventFactory.createDropItemEventDispense(cause, entities, entitySnapshotBuilder.build(), (World) this);
+            event = SpongeEventFactory.createDropItemEventDispense(cause, entities, entitySnapshotBuilder.build(), this);
         }
 
         if (!(SpongeImpl.postEvent(event))) {
@@ -1082,17 +1080,11 @@ public abstract class MixinWorld implements World, IMixinWorld {
         SpawnEntityEvent event = null;
 
         if (this.worldSpawnerRunning) {
-            event =
-                    SpongeEventFactory.createSpawnEntityEventSpawner(cause, entities, entitySnapshotBuilder.build(),
-                                                                     (World) (Object) this);
+            event = SpongeEventFactory.createSpawnEntityEventSpawner(cause, entities, entitySnapshotBuilder.build(), (World) this);
         } else if (this.chunkSpawnerRunning) {
-            event =
-                    SpongeEventFactory.createSpawnEntityEventChunkLoad(cause, entities, entitySnapshotBuilder.build(),
-                                                                       (World) (Object) this);
+            event = SpongeEventFactory.createSpawnEntityEventChunkLoad(cause, entities, entitySnapshotBuilder.build(), (World) this);
         } else {
-            event =
-                    SpongeEventFactory
-                            .createSpawnEntityEvent(cause, entities, entitySnapshotBuilder.build(), (World) (Object) this);
+            event = SpongeEventFactory.createSpawnEntityEvent(cause, entities, entitySnapshotBuilder.build(), (World) this);
         }
 
         if (!(SpongeImpl.postEvent(event))) {
@@ -2060,7 +2052,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
 
     @Override
     public BlockSnapshot createSnapshot(int x, int y, int z) {
-        World world = ((World) this);
+        World world = this;
         BlockState state = world.getBlock(x, y, z);
         Optional<TileEntity> te = world.getTileEntity(x, y, z);
         final SpongeBlockSnapshotBuilder builder = new SpongeBlockSnapshotBuilder()

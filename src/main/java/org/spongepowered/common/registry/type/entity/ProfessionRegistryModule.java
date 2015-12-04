@@ -86,7 +86,7 @@ public class ProfessionRegistryModule implements AdditionalCatalogRegistryModule
             }
         }
         if (!isRegistered) {
-            if (!careers.contains((SpongeCareer) career)) {
+            if (!careers.contains(career)) {
                 careers.add((SpongeCareer) career);
             }
         }

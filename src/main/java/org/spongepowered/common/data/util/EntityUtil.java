@@ -85,9 +85,9 @@ public final class EntityUtil {
     @SuppressWarnings("unchecked")
     public static boolean refreshPainting(EntityPainting painting, EntityPainting.EnumArt art) {
         final EntityTracker paintingTracker = ((WorldServer) painting.worldObj).getEntityTracker();
-        EntityTrackerEntry paintingEntry = (EntityTrackerEntry) paintingTracker.trackedEntityHashTable.lookup(painting.getEntityId());
+        EntityTrackerEntry paintingEntry = paintingTracker.trackedEntityHashTable.lookup(painting.getEntityId());
         List<EntityPlayerMP> playerMPs = new ArrayList<>();
-        for (EntityPlayerMP player : (Set<EntityPlayerMP>) paintingEntry.trackingPlayers) {
+        for (EntityPlayerMP player : paintingEntry.trackingPlayers) {
             S13PacketDestroyEntities packet = new S13PacketDestroyEntities(painting.getEntityId());
             player.playerNetServerHandler.sendPacket(packet);
             playerMPs.add(player);
