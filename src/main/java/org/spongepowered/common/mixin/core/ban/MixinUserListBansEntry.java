@@ -28,24 +28,24 @@ import com.google.common.base.Optional;
 import net.minecraft.server.management.UserListBansEntry;
 
 import org.spongepowered.api.GameProfile;
-import org.spongepowered.api.entity.player.User;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorage;
 import org.spongepowered.api.util.ban.Ban;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.common.Sponge;
 import org.spongepowered.common.entity.player.SpongeUser;
 
 @Mixin(UserListBansEntry.class)
 public abstract class MixinUserListBansEntry extends MixinBanEntry implements Ban.User {
 
-    private org.spongepowered.api.entity.player.User spongeUser;
+    private org.spongepowered.api.entity.living.player.User spongeUser;
 
     public MixinUserListBansEntry(Object p_i1146_1_) {
         super(p_i1146_1_);
     }
 
     @Override
-    public org.spongepowered.api.entity.player.User getUser() {
+    public org.spongepowered.api.entity.living.player.User getUser() {
         if (this.spongeUser == null) {
             this.resolveUser();
         }
@@ -53,7 +53,7 @@ public abstract class MixinUserListBansEntry extends MixinBanEntry implements Ba
     }
 
     private void resolveUser() {
-        Optional<org.spongepowered.api.entity.player.User> optUser = Sponge.getGame().getServiceManager().provideUnchecked(UserStorage.class).get((GameProfile) this.value);
+        Optional<org.spongepowered.api.entity.living.player.User> optUser = Sponge.getGame().getServiceManager().provideUnchecked(UserStorage.class).get((GameProfile) this.value);
         if (optUser.isPresent()) {
             this.spongeUser = optUser.get();
         }
