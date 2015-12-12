@@ -49,10 +49,12 @@ import net.minecraft.world.storage.WorldInfo;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Server;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.SpongeEventFactory;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
+import org.spongepowered.api.event.command.TabCompleteEvent;
 import org.spongepowered.api.profile.GameProfileManager;
 import org.spongepowered.api.resourcepack.ResourcePack;
 import org.spongepowered.api.service.permission.PermissionService;
@@ -65,6 +67,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.source.ConsoleSource;
 import org.spongepowered.api.world.Dimension;
 import org.spongepowered.api.world.GeneratorTypes;
+import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldCreationSettings;
 import org.spongepowered.api.world.storage.ChunkLayout;
@@ -75,6 +78,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.SpongeImplFactory;
 import org.spongepowered.common.interfaces.IMixinCommandSender;
@@ -90,6 +95,7 @@ import org.spongepowered.common.resourcepack.SpongeResourcePack;
 import org.spongepowered.common.profile.SpongeProfileManager;
 import org.spongepowered.common.text.sink.SpongeMessageSinkFactory;
 import org.spongepowered.common.util.ServerUtils;
+import org.spongepowered.common.util.VecHelper;
 import org.spongepowered.common.world.DimensionManager;
 import org.spongepowered.common.world.SpongeDimensionType;
 import org.spongepowered.common.world.storage.SpongeChunkLayout;
@@ -759,6 +765,21 @@ public abstract class MixinMinecraftServer implements Server, ConsoleSource, IMi
     private void onSaveWorlds(boolean dontLog, CallbackInfo ci) {
         if (!this.enableSaving) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "getTabCompletions", at = @At(value = "RETURN", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
+    public void onTabCompleteChat(ICommandSender sender, String input, BlockPos pos, CallbackInfoReturnable<List> cir, ArrayList arraylist, String astring[], String s1, String astring1[], int i) {
+        Location<World> location = null;
+        if (pos != null) {
+            location = new Location<>((World) sender.getEntityWorld(), VecHelper.toVector(pos));
+        }
+        TabCompleteEvent.Chat event = SpongeEventFactory.createTabCompleteEventChat(Sponge.getGame(), Cause.of(sender), ImmutableList.copyOf(arraylist), arraylist, input, Optional.ofNullable(location));
+        Sponge.getEventManager().post(event);
+        if (event.isCancelled()) {
+            cir.setReturnValue(new ArrayList<>());
+        } else {
+            cir.setReturnValue(event.getTabCompletions());
         }
     }
 }
