@@ -247,4 +247,8 @@ public abstract class AbstractData<M extends DataManipulator<M, I>, I extends Im
         return Objects.equal(this.manipulatorClass, other.manipulatorClass);
     }
 
+    @Override
+    public int getContentVersion() {
+        return 1;
+    }
 }

@@ -209,4 +209,8 @@ public abstract class AbstractImmutableData<I extends ImmutableDataManipulator<I
         return Objects.equal(this.immutableClass, other.immutableClass);
     }
 
+    @Override
+    public int getContentVersion() {
+        return 1;
+    }
 }
