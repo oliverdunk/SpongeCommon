@@ -25,21 +25,11 @@
 package org.spongepowered.common.interfaces;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.block.tileentity.TileEntity;
-import org.spongepowered.api.data.Transaction;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.world.gen.GeneratorPopulator;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.common.config.SpongeConfig;
-
-import java.util.List;
-import java.util.Optional;
+import org.spongepowered.common.world.CauseTracker;
 
 import javax.annotation.Nullable;
 
@@ -51,57 +41,13 @@ public interface IMixinWorld {
 
     ImmutableList<GeneratorPopulator> getGeneratorPopulators();
 
-    List<BlockSnapshot> getBlockBreakList();
-
-    List<Entity> getCapturedEntities();
-
-    List<Entity> getCapturedEntityItems();
-
-    BlockSnapshot createSpongeBlockSnapshot(IBlockState state, IBlockState extended, BlockPos pos, int updateFlag);
-
-    boolean isWorldSpawnerRunning();
-
-    boolean isChunkSpawnerRunning();
-
-    boolean capturingBlocks();
-
-    boolean capturingTerrainGen();
-
-    boolean processingCaptureCause();
-
-    boolean restoringBlocks();
-
-    Optional<BlockSnapshot> getCurrentTickBlock();
-
-    Optional<Entity> getCurrentTickEntity();
-
-    Optional<TileEntity> getCurrentTickTileEntity();
-
     void updateWorldGenerator();
-
-    void handlePostTickCaptures(Cause cause);
-
-    void handleDroppedItems(Cause cause, List<Entity> entities, List<Transaction<BlockSnapshot>> invalidTransactions, boolean destructItems);
-
-    void setProcessingCaptureCause(boolean flag);
-
-    void setWorldSpawnerRunning(boolean flag);
-
-    void setChunkSpawnerRunning(boolean flag);
-
-    void setCapturingTerrainGen(boolean flag);
-
-    void setCapturingEntitySpawns(boolean flag);
-
-    void setCapturingBlockDecay(boolean flag);
-
-    void setCurrentTickBlock(BlockSnapshot snapshot);
 
     long getWeatherStartTime();
 
     void setWeatherStartTime(long weatherStartTime);
 
-    void notifyBlockOfStateChange(BlockPos notifyPos, Block sourceBlock, BlockPos sourcePos);
+    CauseTracker getCauseTracker();
 
     @Nullable
     EntityPlayer getClosestPlayerToEntityWhoAffectsSpawning(net.minecraft.entity.Entity entity, double distance);
