@@ -71,6 +71,7 @@ import org.spongepowered.common.interfaces.entity.IMixinEntity;
 import org.spongepowered.common.registry.provider.DirectionFacingProvider;
 import org.spongepowered.common.util.StaticMixinHelper;
 import org.spongepowered.common.util.VecHelper;
+import org.spongepowered.common.world.CauseTracker;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -206,21 +207,21 @@ public class SpongeCommonEventFactory {
     }
 
     public static void handleCreativeClickInventoryEvent(Cause cause, EntityPlayerMP player, C10PacketCreativeInventoryAction packetIn) {
-        IMixinWorld world = ((IMixinWorld) player.worldObj);
+        CauseTracker tracker = ((IMixinWorld) player.worldObj).getCauseTracker();
         ItemStackSnapshot newCursor =
                 player.inventory.getItemStack() == null ? ItemStackSnapshot.NONE
                         : ((org.spongepowered.api.item.inventory.ItemStack) player.inventory.getItemStack()).createSnapshot();
         Transaction<ItemStackSnapshot> cursorTransaction = new Transaction<>(StaticMixinHelper.lastCursor, newCursor);
         CreativeInventoryEvent event = null;
-        if (packetIn.getSlotId() == -1 && world.getCapturedEntityItems().size() > 0) {
-            Iterator<Entity> iterator = world.getCapturedEntityItems().iterator();
+        if (packetIn.getSlotId() == -1 && tracker.getCapturedEntityItems().size() > 0) {
+            Iterator<Entity> iterator = tracker.getCapturedEntityItems().iterator();
             ImmutableList.Builder<EntitySnapshot> entitySnapshotBuilder = new ImmutableList.Builder<>();
             while (iterator.hasNext()) {
                 Entity currentEntity = iterator.next();
                 ((IMixinEntity) currentEntity).trackEntityUniqueId(NbtDataUtil.SPONGE_ENTITY_CREATOR, player.getUniqueID());
                 entitySnapshotBuilder.add(currentEntity.createSnapshot());
             }
-            event = SpongeEventFactory.createCreativeInventoryEventDrop(SpongeImpl.getGame(), cause, cursorTransaction, world.getCapturedEntityItems(),
+            event = SpongeEventFactory.createCreativeInventoryEventDrop(SpongeImpl.getGame(), cause, cursorTransaction, tracker.getCapturedEntityItems(),
                                                                         entitySnapshotBuilder.build(), (org.spongepowered.api.item.inventory.Container) player.openContainer, (World) player.worldObj,
                                                                         ((IMixinContainer) player.openContainer).getCapturedTransactions());
         } else {
@@ -239,7 +240,7 @@ public class SpongeCommonEventFactory {
         SpongeImpl.postEvent(event);
         if (event.isCancelled()) {
             if (event instanceof CreativeInventoryEvent.Drop) {
-                world.getCapturedEntityItems().clear();
+                tracker.getCapturedEntityItems().clear();
             }
 
             // Restore cursor
@@ -289,7 +290,7 @@ public class SpongeCommonEventFactory {
     }
 
     public static void handleClickInteractInventoryEvent(Cause cause, EntityPlayerMP player, C0EPacketClickWindow packetIn) {
-        IMixinWorld world = ((IMixinWorld) player.worldObj);
+        CauseTracker tracker = ((IMixinWorld) player.worldObj).getCauseTracker();
         ItemStackSnapshot newCursor =
                 player.inventory.getItemStack() == null ? ItemStackSnapshot.NONE
                         : ((org.spongepowered.api.item.inventory.ItemStack) player.inventory.getItemStack()).createSnapshot();
@@ -307,7 +308,7 @@ public class SpongeCommonEventFactory {
         if (packetIn.getMode() == MODE_CLICK || packetIn.getMode() == MODE_PICKBLOCK) {
             if (packetIn.getUsedButton() == BUTTON_PRIMARY) {
                 if (packetIn.getSlotId() == CLICK_OUTSIDE) {
-                    Iterator<Entity> iterator = world.getCapturedEntityItems().iterator();
+                    Iterator<Entity> iterator = tracker.getCapturedEntityItems().iterator();
                     ImmutableList.Builder<EntitySnapshot> entitySnapshotBuilder = new ImmutableList.Builder<>();
                     while (iterator.hasNext()) {
                         Entity currentEntity = iterator.next();
@@ -316,8 +317,8 @@ public class SpongeCommonEventFactory {
                     }
                     clickEvent =
                             SpongeEventFactory.createClickInventoryEventDropFull(SpongeImpl.getGame(), cause, cursorTransaction,
-                                                                                 world.getCapturedEntities(), entitySnapshotBuilder.build(),
-                                                                                 (org.spongepowered.api.item.inventory.Container) player.openContainer, (World) world,
+                                    tracker.getCapturedEntities(), entitySnapshotBuilder.build(),
+                                                                                 (org.spongepowered.api.item.inventory.Container) player.openContainer, (World) player.worldObj,
                                                                                  ((IMixinContainer) player.openContainer).getCapturedTransactions());
                 } else {
                     clickEvent =
@@ -327,7 +328,7 @@ public class SpongeCommonEventFactory {
                 }
             } else if (packetIn.getUsedButton() == BUTTON_SECONDARY) {
                 if (packetIn.getSlotId() == CLICK_OUTSIDE) {
-                    Iterator<Entity> iterator = world.getCapturedEntityItems().iterator();
+                    Iterator<Entity> iterator = tracker.getCapturedEntityItems().iterator();
                     ImmutableList.Builder<EntitySnapshot> entitySnapshotBuilder = new ImmutableList.Builder<>();
                     while (iterator.hasNext()) {
                         Entity currentEntity = iterator.next();
@@ -336,8 +337,8 @@ public class SpongeCommonEventFactory {
                     }
                     clickEvent =
                             SpongeEventFactory.createClickInventoryEventDropSingle(SpongeImpl.getGame(), cause, cursorTransaction,
-                                                                                   world.getCapturedEntities(), entitySnapshotBuilder.build(),
-                                                                                   (org.spongepowered.api.item.inventory.Container) player.openContainer, (World) world,
+                                    tracker.getCapturedEntities(), entitySnapshotBuilder.build(),
+                                                                                   (org.spongepowered.api.item.inventory.Container) player.openContainer, (World) player.worldObj,
                                                                                    ((IMixinContainer) player.openContainer).getCapturedTransactions());
                 } else {
                     clickEvent =
@@ -408,7 +409,7 @@ public class SpongeCommonEventFactory {
 
         if (clickEvent.isCancelled()) {
             if (clickEvent instanceof ClickInventoryEvent.Drop) {
-                world.getCapturedEntityItems().clear();
+                tracker.getCapturedEntityItems().clear();
             }
 
             // Restore cursor
@@ -463,13 +464,13 @@ public class SpongeCommonEventFactory {
         if (sourceEntity != null) {
             cause = Cause.of(NamedCause.source(sourceEntity));
         } else {
-            IMixinWorld spongeWorld = (IMixinWorld) world;
-            if (spongeWorld.getCurrentTickTileEntity().isPresent()) {
-                cause = Cause.of(NamedCause.source(spongeWorld.getCurrentTickTileEntity().get()));
-            } else if (spongeWorld.getCurrentTickBlock().isPresent()) {
-                cause = Cause.of(NamedCause.source(spongeWorld.getCurrentTickBlock().get()));
-            } else if (spongeWorld.getCurrentTickEntity().isPresent()) {
-                cause = Cause.of(NamedCause.source(spongeWorld.getCurrentTickEntity().get()));
+            CauseTracker tracker = ((IMixinWorld) world).getCauseTracker();
+            if (tracker.getCurrentTickTileEntity().isPresent()) {
+                cause = Cause.of(NamedCause.source(tracker.getCurrentTickTileEntity().get()));
+            } else if (tracker.getCurrentTickBlock().isPresent()) {
+                cause = Cause.of(NamedCause.source(tracker.getCurrentTickBlock().get()));
+            } else if (tracker.getCurrentTickEntity().isPresent()) {
+                cause = Cause.of(NamedCause.source(tracker.getCurrentTickEntity().get()));
             }
 
             if (cause == null) {

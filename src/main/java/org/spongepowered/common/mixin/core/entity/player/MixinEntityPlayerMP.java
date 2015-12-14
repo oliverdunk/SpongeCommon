@@ -42,15 +42,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.IChatComponent;
-import org.spongepowered.api.event.cause.NamedCause;
-import org.spongepowered.api.profile.GameProfile;
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.data.manipulator.mutable.entity.BanData;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.sound.SoundType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.network.PlayerConnection;
+import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.resourcepack.ResourcePack;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.service.user.UserStorageService;
@@ -62,7 +63,6 @@ import org.spongepowered.api.text.title.Title;
 import org.spongepowered.api.text.title.Titles;
 import org.spongepowered.api.util.Tristate;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
-import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -87,6 +87,7 @@ import org.spongepowered.common.scoreboard.SpongeScoreboard;
 import org.spongepowered.common.text.SpongeTexts;
 import org.spongepowered.common.text.chat.SpongeChatType;
 import org.spongepowered.common.util.LanguageUtil;
+import org.spongepowered.common.world.CauseTracker;
 
 import java.util.Collection;
 import java.util.List;
@@ -116,7 +117,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     private Scoreboard spongeScoreboard = ((World) this.worldObj).getScoreboard();
 
     private net.minecraft.scoreboard.Scoreboard mcScoreboard = this.worldObj.getScoreboard();
-    
+
     @Nullable private Vector3d velocityOverride = null;
 
     @Inject(method = "removeEntity", at = @At(value = "INVOKE",
@@ -136,11 +137,11 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     @SuppressWarnings("unchecked")
     @Inject(method = "onDeath", at = @At(value = "RETURN"))
     public void onPlayerDeath(DamageSource damageSource, CallbackInfo ci) {
-        IMixinWorld world = (IMixinWorld) this.worldObj;
+        CauseTracker tracker = ((IMixinWorld) this.worldObj).getCauseTracker();
         // Special case for players as sometimes tick capturing won't capture deaths
-        if (world.getCapturedEntityItems().size() > 0) {
-            world.handleDroppedItems(Cause.of(NamedCause.source(this), NamedCause.of("Attacker", damageSource)),
-                (List<org.spongepowered.api.entity.Entity>) (List<?>) world.getCapturedEntityItems(), null, true);
+        if (tracker.getCapturedEntityItems().size() > 0) {
+            tracker.handleDroppedItems(Cause.of(NamedCause.source(this), NamedCause.of("Attacker", damageSource)),
+                (List<org.spongepowered.api.entity.Entity>) (List<?>) tracker.getCapturedEntityItems(), null, true);
         }
     }
 
@@ -414,7 +415,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     public void setSleepingIgnored(boolean sleepingIgnored) {
         this.sleepingIgnored = sleepingIgnored;
     }
-    
+
     @Override
     public Vector3d getVelocity() {
         if (this.velocityOverride != null) {
@@ -422,13 +423,13 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
         }
         return super.getVelocity();
     }
-    
+
     @Override
     public void setVelocity(Vector3d velocity) {
         super.setVelocity(velocity);
         this.velocityOverride = null;
     }
-    
+
     @Override
     public void setVelocityOverride(@Nullable Vector3d velocity) {
         this.velocityOverride = velocity;

@@ -47,28 +47,28 @@ public abstract class MixinSpawnerAnimals {
 
     @Inject(method = "findChunksForSpawning", at = @At(value = "HEAD"))
     public void onFindChunksForSpawningHead(WorldServer worldServer, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnedOnSetTickRate, CallbackInfoReturnable<Integer> ci) {
-        ((IMixinWorld) worldServer).setWorldSpawnerRunning(true);
-        ((IMixinWorld) worldServer).setProcessingCaptureCause(true);
+        ((IMixinWorld) worldServer).getCauseTracker().setWorldSpawnerRunning(true);
+        ((IMixinWorld) worldServer).getCauseTracker().setProcessingCaptureCause(true);
     }
 
     @Inject(method = "findChunksForSpawning", at = @At(value = "RETURN"))
     public void onFindChunksForSpawningReturn(WorldServer worldServer, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean spawnedOnSetTickRate, CallbackInfoReturnable<Integer> ci) {
-        ((IMixinWorld) worldServer).handlePostTickCaptures(Cause.of(NamedCause.source(worldServer)));
-        ((IMixinWorld) worldServer).setWorldSpawnerRunning(false);
-        ((IMixinWorld) worldServer).setProcessingCaptureCause(false);
+        ((IMixinWorld) worldServer).getCauseTracker().handlePostTickCaptures(Cause.of(NamedCause.source(worldServer)));
+        ((IMixinWorld) worldServer).getCauseTracker().setWorldSpawnerRunning(false);
+        ((IMixinWorld) worldServer).getCauseTracker().setProcessingCaptureCause(false);
     }
 
     @Inject(method = "performWorldGenSpawning", at = @At(value = "HEAD"))
     private static void onPerformWorldGenSpawningHead(World worldServer, BiomeGenBase biome, int j, int k, int l, int m, Random rand, CallbackInfo ci) {
-        ((IMixinWorld) worldServer).setChunkSpawnerRunning(true);
-        ((IMixinWorld) worldServer).setProcessingCaptureCause(true);
+        ((IMixinWorld) worldServer).getCauseTracker().setChunkSpawnerRunning(true);
+        ((IMixinWorld) worldServer).getCauseTracker().setProcessingCaptureCause(true);
     }
 
     @Inject(method = "performWorldGenSpawning", at = @At(value = "RETURN"))
     private static void onPerformWorldGenSpawningReturn(World worldServer, BiomeGenBase biome, int j, int k, int l, int m, Random rand, CallbackInfo ci) {
-        ((IMixinWorld) worldServer).handlePostTickCaptures(Cause.of(NamedCause.source(worldServer), NamedCause.of("Biome", biome)));
-        ((IMixinWorld) worldServer).setChunkSpawnerRunning(false);
-        ((IMixinWorld) worldServer).setProcessingCaptureCause(true);
+        ((IMixinWorld) worldServer).getCauseTracker().handlePostTickCaptures(Cause.of(NamedCause.source(worldServer), NamedCause.of("Biome", biome)));
+        ((IMixinWorld) worldServer).getCauseTracker().setChunkSpawnerRunning(false);
+        ((IMixinWorld) worldServer).getCauseTracker().setProcessingCaptureCause(true);
     }
 
     @Redirect(method = "findChunksForSpawning", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;isSpectator()Z"))

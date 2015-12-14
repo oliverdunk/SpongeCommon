@@ -49,6 +49,7 @@ import org.spongepowered.common.data.manipulator.immutable.block.ImmutableSponge
 import org.spongepowered.common.data.manipulator.immutable.block.ImmutableSpongeTreeData;
 import org.spongepowered.common.data.util.TreeTypeResolver;
 import org.spongepowered.common.interfaces.IMixinWorld;
+import org.spongepowered.common.world.CauseTracker;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,10 +60,10 @@ public abstract class MixinBlockLeaves extends MixinBlock {
 
     @Redirect(method = "destroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockToAir(Lnet/minecraft/util/BlockPos;)Z") )
     private boolean onDestroyLeaves(net.minecraft.world.World worldIn, BlockPos pos) {
-        IMixinWorld spongeWorld = (IMixinWorld) worldIn;
-        spongeWorld.setCapturingBlockDecay(true);
+        CauseTracker tracker = ((IMixinWorld) worldIn).getCauseTracker();
+        tracker.setCapturingBlockDecay(true);
         boolean result = worldIn.setBlockToAir(pos);
-        spongeWorld.setCapturingBlockDecay(false);
+        tracker.setCapturingBlockDecay(false);
         return result;
     }
 

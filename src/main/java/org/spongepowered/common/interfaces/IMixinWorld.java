@@ -25,6 +25,7 @@
 package org.spongepowered.common.interfaces;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.api.world.gen.GeneratorPopulator;
 import org.spongepowered.api.world.gen.Populator;
@@ -56,5 +57,7 @@ public interface IMixinWorld {
     EntityPlayer getClosestPlayerWhoAffectsSpawning(double x, double y, double z, double distance);
 
     boolean isAnyPlayerWithinRangeAtWhoAffectsSpawning(double x, double y, double z, double range);
+
+    void forceAddEntity(Entity entity);
 
 }

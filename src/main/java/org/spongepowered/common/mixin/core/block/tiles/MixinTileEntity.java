@@ -38,8 +38,8 @@ import org.spongepowered.api.data.DataView;
 import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.Queries;
 import org.spongepowered.api.data.manipulator.DataManipulator;
-import org.spongepowered.api.util.persistence.InvalidDataException;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
+import org.spongepowered.api.util.persistence.InvalidDataException;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,9 +56,10 @@ import org.spongepowered.common.entity.PlayerTracker;
 import org.spongepowered.common.interfaces.IMixinWorld;
 import org.spongepowered.common.interfaces.block.tile.IMixinTileEntity;
 import org.spongepowered.common.interfaces.data.IMixinCustomDataHolder;
-import org.spongepowered.common.util.persistence.NbtTranslator;
 import org.spongepowered.common.util.SpongeHooks;
 import org.spongepowered.common.util.VecHelper;
+import org.spongepowered.common.util.persistence.NbtTranslator;
+import org.spongepowered.common.world.CauseTracker;
 
 import java.util.Collection;
 import java.util.List;
@@ -82,10 +83,10 @@ public abstract class MixinTileEntity implements TileEntity, IMixinTileEntity {
     @Inject(method = "markDirty", at = @At(value = "HEAD"))
     public void onMarkDirty(CallbackInfo ci) {
         if (this.worldObj != null && !this.worldObj.isRemote) {
-            IMixinWorld world = (IMixinWorld) this.worldObj;
+            CauseTracker tracker = ((IMixinWorld) this.worldObj).getCauseTracker();
             // This handles transfers to this TE from a source such as a Hopper
-            if (world.getCurrentTickTileEntity().isPresent() && this != world.getCurrentTickTileEntity().get()) {
-                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) world.getCurrentTickTileEntity().get();
+            if (tracker.getCurrentTickTileEntity().isPresent() && this != tracker.getCurrentTickTileEntity().get()) {
+                net.minecraft.tileentity.TileEntity te = (net.minecraft.tileentity.TileEntity) tracker.getCurrentTickTileEntity().get();
                 SpongeHooks.tryToTrackBlock(te.getWorld(), te, te.getPos(), this.getBlockType(), this.pos, PlayerTracker.Type.NOTIFIER);
             }
         }

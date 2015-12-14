@@ -38,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.common.command.MinecraftCommandWrapper;
 import org.spongepowered.common.interfaces.IMixinWorld;
+import org.spongepowered.common.world.CauseTracker;
 
 @Mixin(CommandHandler.class)
 public abstract class MixinCommandHandler {
@@ -45,17 +46,16 @@ public abstract class MixinCommandHandler {
     @Inject(method = "tryExecute", at = @At(value = "HEAD"))
     public void onExecuteCommandHead(ICommandSender sender, String[] args, ICommand command, String input, CallbackInfoReturnable<Boolean> ci) {
         if (sender.getEntityWorld() != null) {
-            IMixinWorld world = (IMixinWorld) sender.getEntityWorld();
-            world.setProcessingCaptureCause(true);
+            ((IMixinWorld) sender.getEntityWorld()).getCauseTracker().setProcessingCaptureCause(true);
         }
     }
 
     @Inject(method = "tryExecute", at = @At(value = "RETURN"))
     public void onExecuteCommandReturn(ICommandSender sender, String[] args, ICommand command, String input, CallbackInfoReturnable<Boolean> ci) {
         if (sender.getEntityWorld() != null) {
-            IMixinWorld world = (IMixinWorld) sender.getEntityWorld();
-            world.handlePostTickCaptures(Cause.of(NamedCause.of("Command", command), NamedCause.of("CommandSender", sender)));
-            world.setProcessingCaptureCause(false);
+            CauseTracker tracker = ((IMixinWorld) sender.getEntityWorld()).getCauseTracker();
+            tracker.handlePostTickCaptures(Cause.of(NamedCause.of("Command", command), NamedCause.of("CommandSender", sender)));
+            tracker.setProcessingCaptureCause(false);
         }
     }
 

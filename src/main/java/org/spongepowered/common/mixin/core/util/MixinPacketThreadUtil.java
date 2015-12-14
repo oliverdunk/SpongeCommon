@@ -28,11 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
 import net.minecraft.network.play.client.C16PacketClientStatus;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.NamedCause;
@@ -42,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.common.interfaces.IMixinWorld;
 import org.spongepowered.common.util.StaticMixinHelper;
+import org.spongepowered.common.world.CauseTracker;
 
 @Mixin(targets = "net/minecraft/network/PacketThreadUtil$1")
 public class MixinPacketThreadUtil {
@@ -75,17 +74,16 @@ public class MixinPacketThreadUtil {
                     : ((org.spongepowered.api.item.inventory.ItemStack) StaticMixinHelper.packetPlayer.inventory.getItemStack()).createSnapshot();
             StaticMixinHelper.lastCursor = cursor;
 
-            IMixinWorld world = (IMixinWorld) StaticMixinHelper.packetPlayer.worldObj;
+            CauseTracker tracker = ((IMixinWorld) StaticMixinHelper.packetPlayer.worldObj).getCauseTracker();
             if (StaticMixinHelper.packetPlayer.getHeldItem() != null
                     && (packetIn instanceof C07PacketPlayerDigging || packetIn instanceof C08PacketPlayerBlockPlacement)) {
                 StaticMixinHelper.lastPlayerItem = ItemStack.copyItemStack(StaticMixinHelper.packetPlayer.getHeldItem());
             }
 
-            world.setProcessingCaptureCause(true);
+            tracker.setProcessingCaptureCause(true);
             packetIn.processPacket(netHandler);
-            ((IMixinWorld) StaticMixinHelper.packetPlayer.worldObj)
-                .handlePostTickCaptures(Cause.of(NamedCause.source(StaticMixinHelper.packetPlayer)));
-            world.setProcessingCaptureCause(false);
+            tracker.handlePostTickCaptures(Cause.of(NamedCause.source(StaticMixinHelper.packetPlayer)));
+            tracker.setProcessingCaptureCause(false);
             StaticMixinHelper.packetPlayer = null;
             StaticMixinHelper.processingPacket = null;
             StaticMixinHelper.lastCursor = null;

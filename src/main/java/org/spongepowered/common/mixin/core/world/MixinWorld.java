@@ -61,6 +61,7 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
@@ -215,7 +216,7 @@ public abstract class MixinWorld implements World, IMixinWorld {
     private ImmutableList<GeneratorPopulator> generatorPopulators;
 
     protected SpongeScoreboard spongeScoreboard = new SpongeScoreboard();
-    private final CauseTracker causeTracker = new CauseTracker((World) this);
+    protected final CauseTracker causeTracker = new CauseTracker((World) this);
 
     // @formatter:off
     @Shadow public Profiler theProfiler;
@@ -474,7 +475,47 @@ public abstract class MixinWorld implements World, IMixinWorld {
     public boolean spawnEntity(Entity entity, Cause cause) {
         checkNotNull(entity, "Entity cannot be null!");
         checkNotNull(cause, "Cause cannot be null!");
-        return this.causeTracker.spawnEntity(entity, cause);
+
+        net.minecraft.entity.Entity entityIn = (net.minecraft.entity.Entity) entity;
+        // do not drop any items while restoring blocksnapshots. Prevents dupes
+        if (!this.isRemote && (entityIn == null || (entityIn instanceof EntityItem && this.causeTracker.restoringBlocks))) {
+            return false;
+        }
+
+        int i = MathHelper.floor_double(entityIn.posX / 16.0D);
+        int j = MathHelper.floor_double(entityIn.posZ / 16.0D);
+        boolean flag = entityIn.forceSpawn;
+
+        if (entityIn instanceof EntityPlayer) {
+            flag = true;
+        }
+
+        if (!flag && !this.isChunkLoaded(i, j, true)) {
+            return false;
+        } else {
+            if (entityIn instanceof EntityPlayer) {
+                EntityPlayer entityplayer = (EntityPlayer) entityIn;
+                this.playerEntities.add(entityplayer);
+                ((net.minecraft.world.World)(Object)this).updateAllPlayersSleepingFlag();
+            }
+
+            if (this.isRemote || flag) {
+                this.getChunkFromChunkCoords(i, j).addEntity(entityIn);
+                this.loadedEntityList.add(entityIn);
+                this.onEntityAdded(entityIn);
+                return true;
+            }
+        }
+        return this.causeTracker.spawnEntity(entity, cause, flag);
+    }
+
+    @Override
+    public void forceAddEntity(net.minecraft.entity.Entity entity) {
+        int x = MathHelper.floor_double(entity.posX / 16.0D);
+        int z = MathHelper.floor_double(entity.posZ / 16.0D);
+        this.getChunkFromChunkCoords(x, z).addEntity(entity);
+        this.loadedEntityList.add(entity);
+        this.onEntityAdded(entity);
     }
 
     /**
