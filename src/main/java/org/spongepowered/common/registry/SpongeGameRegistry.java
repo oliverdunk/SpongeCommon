@@ -44,6 +44,11 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.recipe.RecipeRegistry;
 import org.spongepowered.api.network.status.Favicon;
 import org.spongepowered.api.profile.GameProfile;
+import org.spongepowered.api.registry.AdditionalCatalogRegistryModule;
+import org.spongepowered.api.registry.CatalogRegistryModule;
+import org.spongepowered.api.registry.ExtraClassCatalogRegistryModule;
+import org.spongepowered.api.registry.RegistrationPhase;
+import org.spongepowered.api.registry.RegistryModule;
 import org.spongepowered.api.resourcepack.ResourcePack;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.statistic.BlockStatistic;
@@ -69,7 +74,7 @@ import org.spongepowered.common.network.status.SpongeFavicon;
 import org.spongepowered.common.registry.type.block.RotationRegistryModule;
 import org.spongepowered.common.registry.type.entity.AITaskTypeModule;
 import org.spongepowered.common.registry.type.world.GeneratorModifierRegistryModule;
-import org.spongepowered.common.registry.util.RegistrationDependency;
+import org.spongepowered.api.registry.util.RegistrationDependency;
 import org.spongepowered.common.registry.util.RegistryModuleLoader;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 import org.spongepowered.common.util.graph.DirectedGraph;
@@ -135,36 +140,35 @@ public class SpongeGameRegistry implements GameRegistry {
         DataRegistrar.setupSerialization(SpongeImpl.getGame());
     }
 
-    /**
-     * Registers the {@link CatalogRegistryModule} for handling the registry stuffs.
-     *
-     * @param catalogClass
-     * @param registryModule
-     * @param <T>
-     */
+
+    @Override
     public <T extends CatalogType> SpongeGameRegistry registerModule(Class<T> catalogClass, CatalogRegistryModule<T> registryModule) {
         checkArgument(!this.catalogRegistryMap.containsKey(catalogClass), "Already registered a registry module!");
         this.catalogRegistryMap.put(catalogClass, registryModule);
         return this;
     }
 
+    @Override
     public SpongeGameRegistry registerModule(RegistryModule module) {
         this.registryModules.add(checkNotNull(module));
         return this;
     }
 
+    @Override
     public <T> SpongeGameRegistry registerBuilderSupplier(Class<T> builderClass, Supplier<? extends T> supplier) {
         checkArgument(!this.builderSupplierMap.containsKey(builderClass), "Already registered a builder supplier!");
         this.builderSupplierMap.put(builderClass, supplier);
         return this;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends CatalogType> CatalogRegistryModule<T> getRegistryModuleFor(Class<T> catalogClass) {
         checkNotNull(catalogClass);
         return (CatalogRegistryModule<T>) this.catalogRegistryMap.get(catalogClass);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends CatalogType> void registerAdditionalType(Class<T> catalogClass, T extra) {
         CatalogRegistryModule<T> module = getRegistryModuleFor(catalogClass);
@@ -173,6 +177,7 @@ public class SpongeGameRegistry implements GameRegistry {
         }
     }
 
+    @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public <TUnknown, T extends CatalogType> boolean isAdditionalRegistered(Class<TUnknown> clazz, Class<T> catalogType) {
         CatalogRegistryModule<T> module = getRegistryModuleFor(catalogType);

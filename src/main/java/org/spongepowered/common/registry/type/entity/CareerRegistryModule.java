@@ -31,9 +31,9 @@ import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.data.type.Career;
 import org.spongepowered.api.data.type.Careers;
 import org.spongepowered.common.entity.SpongeCareer;
-import org.spongepowered.common.registry.AdditionalCatalogRegistryModule;
-import org.spongepowered.common.registry.util.RegisterCatalog;
-import org.spongepowered.common.registry.util.RegistrationDependency;
+import org.spongepowered.api.registry.AdditionalCatalogRegistryModule;
+import org.spongepowered.api.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.util.RegistrationDependency;
 
 import java.util.Collection;
 import java.util.Comparator;

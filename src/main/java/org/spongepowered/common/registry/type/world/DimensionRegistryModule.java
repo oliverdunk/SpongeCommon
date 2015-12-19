@@ -34,9 +34,9 @@ import org.spongepowered.api.world.DimensionTypes;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.config.SpongeConfig;
 import org.spongepowered.common.interfaces.world.IMixinWorldProvider;
-import org.spongepowered.common.registry.ExtraClassCatalogRegistryModule;
+import org.spongepowered.api.registry.ExtraClassCatalogRegistryModule;
 import org.spongepowered.common.registry.RegistryHelper;
-import org.spongepowered.common.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.common.world.DimensionManager;
 
 import java.util.Collection;

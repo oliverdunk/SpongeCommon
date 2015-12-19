@@ -26,7 +26,7 @@ package org.spongepowered.common.registry.factory;
 
 import org.spongepowered.api.text.selector.SelectorFactory;
 import org.spongepowered.api.text.selector.Selectors;
-import org.spongepowered.common.registry.FactoryRegistry;
+import org.spongepowered.api.registry.FactoryRegistry;
 import org.spongepowered.common.text.selector.SpongeSelectorFactory;
 
 public class SelectorFactoryModule implements FactoryRegistry<SelectorFactory, Selectors> {

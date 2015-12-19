@@ -32,10 +32,10 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.PopulatorTypes;
 import org.spongepowered.common.SpongeImpl;
-import org.spongepowered.common.registry.ExtraClassCatalogRegistryModule;
+import org.spongepowered.api.registry.ExtraClassCatalogRegistryModule;
 import org.spongepowered.common.registry.RegistryHelper;
-import org.spongepowered.common.registry.util.CustomCatalogRegistration;
-import org.spongepowered.common.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.util.CustomCatalogRegistration;
+import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.common.world.gen.SpongePopulatorType;
 
 import java.util.Collection;

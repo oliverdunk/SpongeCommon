@@ -31,10 +31,10 @@ import org.spongepowered.api.entity.living.player.gamemode.GameMode;
 import org.spongepowered.api.text.selector.ArgumentHolder;
 import org.spongepowered.api.text.selector.ArgumentType;
 import org.spongepowered.api.text.selector.ArgumentTypes;
-import org.spongepowered.common.registry.RegistryModule;
+import org.spongepowered.api.registry.RegistryModule;
 import org.spongepowered.common.registry.factory.SelectorFactoryModule;
-import org.spongepowered.common.registry.util.RegisterCatalog;
-import org.spongepowered.common.registry.util.RegistrationDependency;
+import org.spongepowered.api.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.util.RegistrationDependency;
 import org.spongepowered.common.text.selector.SpongeArgumentHolder;
 import org.spongepowered.common.text.selector.SpongeSelectorFactory;
 

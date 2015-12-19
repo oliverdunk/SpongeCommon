@@ -44,8 +44,8 @@ import org.spongepowered.api.world.gen.PopulatorObject;
 import org.spongepowered.api.world.gen.type.BiomeTreeType;
 import org.spongepowered.api.world.gen.type.BiomeTreeTypes;
 import org.spongepowered.common.interfaces.world.gen.IWorldGenTrees;
-import org.spongepowered.common.registry.CatalogRegistryModule;
-import org.spongepowered.common.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.CatalogRegistryModule;
+import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.common.world.gen.type.SpongeBiomeTreeType;
 
 import java.util.Collection;

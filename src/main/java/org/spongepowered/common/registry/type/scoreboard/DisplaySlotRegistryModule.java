@@ -31,9 +31,9 @@ import com.google.common.collect.Maps;
 import net.minecraft.util.EnumChatFormatting;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
-import org.spongepowered.common.registry.CatalogRegistryModule;
+import org.spongepowered.api.registry.CatalogRegistryModule;
 import org.spongepowered.common.registry.type.text.TextColorsRegistryModule;
-import org.spongepowered.common.registry.util.RegisterCatalog;
+import org.spongepowered.api.registry.util.RegisterCatalog;
 import org.spongepowered.common.scoreboard.SpongeDisplaySlot;
 import org.spongepowered.common.text.format.SpongeTextColor;
 
