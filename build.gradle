@@ -1,9 +1,10 @@
 // Gradle plugins
 buildscript {
     repositories {
+        jcenter()
         maven {
-            name = 'plugins'
-            url = 'https://plugins.gradle.org/m2'
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
         }
         maven {
             name = 'minecrell'
@@ -13,10 +14,12 @@ buildscript {
 
     dependencies {
         // VanillaGradle contains a custom ForgeGradle extension for SpongeCommon (see below)
-        classpath 'net.minecrell:VanillaGradle:2.0.2_1'
+        classpath 'net.minecrell:VanillaGradle:2.0.2_2'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-20151205.212842-160'
         classpath('nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0') {
             exclude module: 'guava' // Older version of Guava conflicts with ForgeGradle
         }
+        classpath 'org.spongepowered:mixingradle:0.1-SNAPSHOT'
     }
 }
 
@@ -24,6 +27,7 @@ buildscript {
 // Compared to the regular tweaker-server plugin, SpongeCommon has all run tasks disabled
 // and the Minecraft workspace defined as "provided" so they won't conflict with the implementation
 apply plugin: 'net.minecrell.vanilla.server.library'
+apply plugin: 'org.spongepowered.mixin'
 ext.minecraftPlugin = plugins.getPlugin('net.minecrell.vanilla.server.library')
 ext.DIR_MCP_MAPPINGS = net.minecraftforge.gradle.common.Constants.DIR_MCP_MAPPINGS
 
@@ -40,7 +44,7 @@ minecraft {
 
 dependencies {
     compile api
-    compile('org.spongepowered:mixin:0.4.7-SNAPSHOT') {
+    compile('org.spongepowered:mixin:0.4.10-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
