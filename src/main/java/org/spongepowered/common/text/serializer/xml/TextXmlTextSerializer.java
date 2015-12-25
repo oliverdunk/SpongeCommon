@@ -22,13 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.text.xml;
+package org.spongepowered.common.text.serializer.xml;
 
 import static org.spongepowered.common.util.SpongeCommonTranslationHelper.t;
 
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextRepresentation;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextParseException;
+import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.util.TextMessageException;
 import org.spongepowered.common.text.SpongeTexts;
 import org.xml.sax.InputSource;
@@ -48,8 +48,8 @@ import javax.xml.bind.UnmarshallerHandler;
 /**
  * Xml format serializer for Text instances.
  */
-public class TextXmlRepresentation implements TextRepresentation {
-    public static final TextXmlRepresentation INSTANCE = new TextXmlRepresentation();
+public class TextXmlTextSerializer implements TextSerializer {
+
     private static final JAXBContext CONTEXT;
 
     static {
@@ -62,22 +62,25 @@ public class TextXmlRepresentation implements TextRepresentation {
         }
     }
 
-    private TextXmlRepresentation() {}
-
     @Override
-    public String to(Text text) {
-        return to(text, SpongeTexts.getDefaultLocale());
+    public String getId() {
+        return "sponge:textxml";
     }
 
     @Override
-    public String to(Text text, Locale locale) {
+    public String getName() {
+        return "TextXmlTextSerializer";
+    }
+
+    @Override
+    public String serialize(Text text, Locale locale) {
         final StringWriter writer = new StringWriter();
         try {
             Marshaller marshaller = CONTEXT.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
             marshaller.marshal(Element.fromText(text, locale), writer);
         } catch (JAXBException e) {
-            return Texts.toPlain(text, locale);
+            throw new RuntimeException(e);
         }
         return writer.getBuffer().toString();
     }
@@ -97,22 +100,14 @@ public class TextXmlRepresentation implements TextRepresentation {
     }
 
     @Override
-    public Text from(String input) throws TextMessageException {
+    public Text parse(String input) throws TextParseException {
         try {
             input = "<span>" + input + "</span>";
             final Element element = unmarshal(CONTEXT, input, true);
             return element.toText().build();
         } catch (Exception e) {
-            throw new TextMessageException(t("Error parsing TextXML message '%s'", input), e);
+            throw new TextParseException("Error parsing TextXML message", e);
         }
     }
 
-    @Override
-    public Text fromUnchecked(String input) {
-        try {
-            return from(input);
-        } catch (TextMessageException e) {
-            return Texts.of(input);
-        }
-    }
 }

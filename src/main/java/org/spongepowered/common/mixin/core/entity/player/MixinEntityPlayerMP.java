@@ -55,11 +55,9 @@ import org.spongepowered.api.resourcepack.ResourcePack;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.chat.ChatType;
 import org.spongepowered.api.text.chat.ChatTypes;
 import org.spongepowered.api.text.title.Title;
-import org.spongepowered.api.text.title.Titles;
 import org.spongepowered.api.util.Tristate;
 import org.spongepowered.api.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -206,16 +204,6 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     }
 
     @Override
-    public void resetTitle() {
-        sendTitle(Titles.RESET);
-    }
-
-    @Override
-    public void clearTitle() {
-        sendTitle(Titles.CLEAR);
-    }
-
-    @Override
     public void spawnParticles(ParticleEffect particleEffect, Vector3d position) {
         this.spawnParticles(particleEffect, position, Integer.MAX_VALUE);
     }
@@ -340,7 +328,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
 
     @Override
     public Text getTeamRepresentation() {
-        return Texts.of(this.getName());
+        return Text.of(this.getName());
     }
 
     @Override
@@ -355,7 +343,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
 
     @Override
     public void kick() {
-        kick(Texts.of(SpongeImpl.getGame().getRegistry().getTranslationById("disconnect.disconnected").get()));
+        kick(Text.of(SpongeImpl.getGame().getRegistry().getTranslationById("disconnect.disconnected").get()));
     }
 
     @Override

@@ -22,9 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.text.xml;
+package org.spongepowered.common.text.serializer.xml;
 
-import org.spongepowered.api.text.TextBuilder;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
 import java.net.URL;
@@ -46,7 +46,7 @@ public class A extends Element {
     }
 
     @Override
-    protected void modifyBuilder(TextBuilder builder) {
+    protected void modifyBuilder(Text.Builder builder) {
         if (this.href == null) {
             throw new IllegalArgumentException("href is null! Make sure it is a valid URL");
         }

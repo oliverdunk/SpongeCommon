@@ -26,14 +26,14 @@ package org.spongepowered.common.mixin.api.text;
 
 import net.minecraft.util.ChatComponentSelector;
 import net.minecraft.util.ChatComponentStyle;
-import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.SelectorText;
 import org.spongepowered.api.text.selector.Selector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Locale;
 
-@Mixin(value = Text.Selector.class, remap = false)
+@Mixin(value = SelectorText.class, remap = false)
 public abstract class MixinTextSelector extends MixinText {
 
     @Shadow protected Selector selector;

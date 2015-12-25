@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.data.processor.value.item;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +35,7 @@ import org.spongepowered.api.data.value.ValueContainer;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.data.processor.common.AbstractSpongeValueProcessor;
 import org.spongepowered.common.data.util.DataConstants;
@@ -51,13 +53,13 @@ public class ItemDisplayNameValueProcessor extends AbstractSpongeValueProcessor<
 
     @Override
     protected Value<Text> constructValue(Text defaultValue) {
-        return new SpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), defaultValue);
+        return new SpongeValue<>(Keys.DISPLAY_NAME, Text.of(), defaultValue);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected boolean set(ItemStack container, Text value) {
-        final String legacy = Texts.legacy().to(value);
+        final String legacy = value.to(LEGACY);
         if (container.getItem() == Items.written_book) {
             NBTTagCompound mainCompound = container.getTagCompound();
             mainCompound.setString(NbtDataUtil.ITEM_BOOK_TITLE, legacy);
@@ -76,12 +78,12 @@ public class ItemDisplayNameValueProcessor extends AbstractSpongeValueProcessor<
                 return Optional.empty(); // Basically, this book wasn't initialized properly.
             }
             final String titleString = mainCompound.getString(NbtDataUtil.ITEM_BOOK_TITLE);
-            return Optional.of(Texts.legacy().fromUnchecked(titleString));
+            return Optional.of(TextSerializers.LEGACY.parse(titleString));
         }
         final NBTTagCompound mainCompound = container.getSubCompound(NbtDataUtil.ITEM_DISPLAY, false);
         if (mainCompound != null && mainCompound.hasKey(NbtDataUtil.ITEM_DISPLAY_NAME, NbtDataUtil.TAG_STRING)) {
             final String displayString = mainCompound.getString(NbtDataUtil.ITEM_DISPLAY_NAME);
-            return Optional.of(Texts.legacy().fromUnchecked(displayString));
+            return Optional.of(TextSerializers.LEGACY.parse(displayString));
         } else {
             return Optional.empty();
         }
@@ -89,7 +91,7 @@ public class ItemDisplayNameValueProcessor extends AbstractSpongeValueProcessor<
 
     @Override
     protected ImmutableValue<Text> constructImmutableValue(Text value) {
-        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), value);
+        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Text.of(), value);
     }
 
     @Override

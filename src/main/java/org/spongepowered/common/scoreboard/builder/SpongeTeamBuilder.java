@@ -31,7 +31,6 @@ import org.spongepowered.api.scoreboard.Team;
 import org.spongepowered.api.scoreboard.Visibilities;
 import org.spongepowered.api.scoreboard.Visibility;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.common.scoreboard.SpongeTeam;
@@ -140,8 +139,8 @@ public class SpongeTeamBuilder implements Team.Builder {
         this.name = null;
         this.displayName = null;
         this.color = TextColors.RESET;
-        this.prefix = Texts.of();
-        this.suffix = Texts.of();
+        this.prefix = Text.of();
+        this.suffix = Text.of();
         this.allowFriendlyFire = false;
         this.showFriendlyInvisibles = false;
         this.nameTagVisibility = Visibilities.ALL;

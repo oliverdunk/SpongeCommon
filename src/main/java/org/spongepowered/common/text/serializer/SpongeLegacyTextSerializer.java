@@ -22,32 +22,64 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.spongepowered.common.text.serializer;
 
-package org.spongepowered.common.mixin.api.text;
-
-import net.minecraft.util.ChatComponentStyle;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.common.interfaces.text.IMixinText;
-import org.spongepowered.common.text.ChatComponentPlaceholder;
+import org.spongepowered.api.text.serializer.LegacyTextSerializer;
 
 import java.util.Locale;
-import java.util.Optional;
 
-@Mixin(value = Text.Placeholder.class, remap = false)
-public class MixinTextPlaceholder extends MixinText {
+public final class SpongeLegacyTextSerializer implements LegacyTextSerializer {
 
-    @Shadow protected String key;
-    @Shadow private Optional<Text> fallback;
+    private final String id;
+    private final String name;
+    private final char code;
+
+    public SpongeLegacyTextSerializer(char code) {
+        this.code = code;
+        this.id = "sponge:legacy:" + code; // TODO
+        this.name = "LegacyTextSerializer (" + code + ')';
+    }
+
+    public SpongeLegacyTextSerializer(String id, String name, char code) {
+        this.id = id;
+        this.name = name;
+        this.code = code;
+    }
 
     @Override
-    protected ChatComponentStyle createComponent(Locale locale) {
-        if (this.fallback.isPresent()) {
-            return new ChatComponentPlaceholder(this.key, ((IMixinText) this.fallback.get()).toComponent(locale));
-        } else {
-            return new ChatComponentPlaceholder(this.key);
-        }
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public char getChar() {
+        return this.code;
+    }
+
+    @Override
+    public String serialize(Text text, Locale locale) {
+        return LegacyTexts.serialize(text, this.code, locale);
+    }
+
+    @Override
+    public Text parse(String input) {
+        return LegacyTexts.parse(input, this.code);
+    }
+
+    @Override
+    public String stripCodes(String text) {
+        return LegacyTexts.strip(text, this.code);
+    }
+
+    @Override
+    public String replaceCodes(String text, char to) {
+        return LegacyTexts.replace(text, this.code, to);
     }
 
 }

@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.item;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.JSON;
+
 import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.MemoryDataContainer;
@@ -32,7 +34,7 @@ import org.spongepowered.api.data.manipulator.immutable.item.ImmutableAuthorData
 import org.spongepowered.api.data.manipulator.mutable.item.AuthorData;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableSingleData;
 import org.spongepowered.common.data.manipulator.mutable.item.SpongeAuthorData;
 import org.spongepowered.common.data.util.DataConstants;
@@ -44,13 +46,13 @@ public class ImmutableSpongeAuthorData extends AbstractImmutableSingleData<Text,
 
     public ImmutableSpongeAuthorData(Text value) {
         super(ImmutableAuthorData.class, value, Keys.BOOK_AUTHOR);
-        this.author = new ImmutableSpongeValue<>(Keys.BOOK_AUTHOR, Texts.of(), value);
+        this.author = new ImmutableSpongeValue<>(Keys.BOOK_AUTHOR, Text.of(), value);
     }
 
     @Override
     public DataContainer toContainer() {
         return new MemoryDataContainer()
-                .set(Keys.BOOK_AUTHOR.getQuery(), Texts.json().to(this.getValue()));
+                .set(Keys.BOOK_AUTHOR.getQuery(), this.getValue().to(JSON));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ImmutableSpongeAuthorData extends AbstractImmutableSingleData<Text,
     @Override
     public int compareTo(ImmutableAuthorData o) {
         return ComparisonChain.start()
-                .compare(Texts.json().to(o.get(Keys.BOOK_AUTHOR).get()), Texts.json().to(this.getValue()))
+                .compare(o.get(Keys.BOOK_AUTHOR).get().to(JSON), this.getValue().to(JSON))
                 .result();
     }
 

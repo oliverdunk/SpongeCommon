@@ -25,6 +25,7 @@
 package org.spongepowered.common.data.processor.data.tileentity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.spongepowered.api.text.serializer.TextSerializers.JSON;
 
 import com.google.common.collect.Lists;
 import net.minecraft.init.Items;
@@ -41,9 +42,9 @@ import org.spongepowered.api.data.manipulator.immutable.tileentity.ImmutableSign
 import org.spongepowered.api.data.manipulator.mutable.tileentity.SignData;
 import org.spongepowered.api.data.merge.MergeFunction;
 import org.spongepowered.api.data.value.BaseValue;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.persistence.InvalidDataException;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.common.data.manipulator.mutable.tileentity.SpongeSignData;
 import org.spongepowered.common.data.processor.common.AbstractSpongeDataProcessor;
 import org.spongepowered.common.data.util.DataConstants;
@@ -85,10 +86,10 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
                     return Optional.empty();
                 }
                 final List<Text> texts = Lists.newArrayListWithCapacity(4);
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text1")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text2")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text3")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text4")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text1")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text2")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text3")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text4")));
                 return Optional.of(new SpongeSignData(texts));
             }
         }
@@ -120,10 +121,10 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
                     return Optional.of(manipulator);
                 }
                 final List<Text> texts = Lists.newArrayListWithCapacity(4);
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text1")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text2")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text3")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text4")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text1")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text2")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text3")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text4")));
                 return Optional.of(overlap.merge(manipulator, new SpongeSignData(texts)));
             }
         }
@@ -141,7 +142,7 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
         final List<Text> textLines = Lists.newArrayListWithCapacity(4);
         try {
             for (int i = 0; i < 4; i++) {
-                textLines.set(i, Texts.json().fromUnchecked(lines.get(i)));
+                textLines.set(i, JSON.parse(lines.get(i)));
             }
         } catch (Exception e) {
             throw new InvalidDataException("Could not deserialize text json lines", e);
@@ -181,10 +182,10 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
                 final NBTTagCompound tileCompound = NbtDataUtil.getOrCreateSubCompound(mainCompound, NbtDataUtil.BLOCK_ENTITY_TAG);
                 tileCompound.setString(NbtDataUtil.BLOCK_ENTITY_ID, NbtDataUtil.SIGN);
                 final List<Text> newText = newData.lines().get();
-                tileCompound.setString("Text1", Texts.json().to(newText.get(1)));
-                tileCompound.setString("Text2", Texts.json().to(newText.get(2)));
-                tileCompound.setString("Text3", Texts.json().to(newText.get(3)));
-                tileCompound.setString("Text4", Texts.json().to(newText.get(4)));
+                tileCompound.setString("Text1", newText.get(1).to(JSON));
+                tileCompound.setString("Text2", newText.get(2).to(JSON));
+                tileCompound.setString("Text3", newText.get(3).to(JSON));
+                tileCompound.setString("Text4", newText.get(4).to(JSON));
                 builder.success(manipulator.getValues());
                 return builder.result(DataTransactionResult.Type.SUCCESS).build();
             } catch (Exception e) {
@@ -251,10 +252,10 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
                     return Optional.empty();
                 }
                 final List<Text> texts = Lists.newArrayListWithCapacity(4);
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text1")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text2")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text3")));
-                texts.add(Texts.legacy().fromUnchecked(tileCompound.getString("Text4")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text1")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text2")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text3")));
+                texts.add(TextSerializers.LEGACY.parse(tileCompound.getString("Text4")));
                 return Optional.of(new SpongeSignData(texts));
             }
         }

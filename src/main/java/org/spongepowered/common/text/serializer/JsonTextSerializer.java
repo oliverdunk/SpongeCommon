@@ -22,15 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.text;
+package org.spongepowered.common.text.serializer;
 
 import static org.spongepowered.common.util.SpongeCommonTranslationHelper.t;
 
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextRepresentation;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextParseException;
+import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.util.TextMessageException;
 import org.spongepowered.common.interfaces.text.IMixinChatComponent;
 import org.spongepowered.common.interfaces.text.IMixinText;
@@ -40,36 +41,31 @@ import java.util.Locale;
 /**
  * TextSerializer implementation for the json format.
  */
-public class JsonTextRepresentation implements TextRepresentation {
-    public static final JsonTextRepresentation INSTANCE = new JsonTextRepresentation();
-
-    private JsonTextRepresentation() {}
+public final class JsonTextSerializer implements TextSerializer {
 
     @Override
-    public String to(Text text) {
-        return to(text, SpongeTexts.getDefaultLocale());
+    public String getId() {
+        return "minecraft:json";
     }
 
     @Override
-    public String to(Text text, Locale locale) {
+    public String getName() {
+        return "JsonTextSerializer";
+    }
+
+    @Override
+    public String serialize(Text text, Locale locale) {
         return ((IMixinText) text).toJson(locale);
     }
 
     @Override
-    public Text from(String input) throws TextMessageException {
+    public Text parse(String input) throws TextParseException {
         try {
             return ((IMixinChatComponent) IChatComponent.Serializer.jsonToComponent(input)).toText();
-        } catch (JsonSyntaxException e) {
-            throw new TextMessageException(t("Failed to parse JSON"), e);
+        } catch (JsonParseException e) {
+            throw new TextParseException("Failed to parse JSON", e);
         }
     }
 
-    @Override
-    public Text fromUnchecked(String input) {
-        try {
-            return from(input);
-        } catch (TextMessageException e) {
-            return Texts.of(input);
-        }
-    }
+
 }

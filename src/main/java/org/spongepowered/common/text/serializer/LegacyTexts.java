@@ -1,38 +1,11 @@
-/*
- * This file is part of Sponge, licensed under the MIT License (MIT).
- *
- * Copyright (c) SpongePowered <https://www.spongepowered.org>
- * Copyright (c) contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-package org.spongepowered.common.text;
+package org.spongepowered.common.text.serializer;
 
 import com.google.common.collect.Lists;
 import net.minecraft.util.EnumChatFormatting;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextBuilder;
-import org.spongepowered.api.text.TextRepresentation;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
-import org.spongepowered.api.util.TextMessageException;
 import org.spongepowered.common.interfaces.text.IMixinText;
 import org.spongepowered.common.text.format.SpongeTextColor;
 
@@ -42,17 +15,13 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
-public class LegacyTextRepresentation implements TextRepresentation {
-    public static final LegacyTextRepresentation DEFAULT_CHAR_INSTANCE = new LegacyTextRepresentation(SpongeTexts.COLOR_CHAR);
+public final class LegacyTexts {
+
     private static final EnumChatFormatting[] formatting = EnumChatFormatting.values();
     private static final String LOOKUP;
 
-    private final char legacyChar;
-
-    public LegacyTextRepresentation(char legacyChar) {
-        this.legacyChar = legacyChar;
+    private LegacyTexts() {
     }
-
 
     static {
         char[] lookup = new char[formatting.length];
@@ -87,31 +56,19 @@ public class LegacyTextRepresentation implements TextRepresentation {
         return pos != -1 ? formatting[pos] : null;
     }
 
-    @Override
-    public String to(Text text) {
-        return to(text, SpongeTexts.getDefaultLocale());
+    public static String serialize(Text text, char code, Locale locale) {
+        return ((IMixinText) text).toLegacy(code, locale);
     }
 
-    @Override
-    public String to(Text text, Locale locale) {
-        return ((IMixinText) text).toLegacy(this.legacyChar, locale);
-    }
-
-    @Override
-    public Text from(String input) throws TextMessageException {
-        return fromUnchecked(input);
-    }
-
-    @Override
-    public Text fromUnchecked(String input) {
-        int next = input.lastIndexOf(this.legacyChar, input.length() - 2);
+    public static Text parse(String input, char code) {
+        int next = input.lastIndexOf(code, input.length() - 2);
         if (next == -1) {
-            return Texts.of(input);
+            return Text.of(input);
         }
 
         List<Text> parts = Lists.newArrayList();
 
-        TextBuilder.Literal current = null;
+        LiteralText.Builder current = null;
         boolean reset = false;
 
         int pos = input.length();
@@ -124,24 +81,24 @@ public class LegacyTextRepresentation implements TextRepresentation {
                         if (reset) {
                             parts.add(current.build());
                             reset = false;
-                            current = Texts.builder("");
+                            current = Text.builder("");
                         } else {
-                            current = Texts.builder("").append(current.build());
+                            current = Text.builder("").append(current.build());
                         }
                     } else {
-                        current = Texts.builder("");
+                        current = Text.builder("");
                     }
 
                     current.content(input.substring(from, pos));
                 } else if (current == null) {
-                    current = Texts.builder("");
+                    current = Text.builder("");
                 }
 
                 reset |= applyStyle(current, format);
                 pos = next;
             }
 
-            next = input.lastIndexOf(this.legacyChar, next - 1);
+            next = input.lastIndexOf(code, next - 1);
         } while (next != -1);
 
         if (current != null) {
@@ -149,10 +106,10 @@ public class LegacyTextRepresentation implements TextRepresentation {
         }
 
         Collections.reverse(parts);
-        return Texts.builder(pos > 0 ? input.substring(0, pos) : "").append(parts).build();
+        return Text.builder(pos > 0 ? input.substring(0, pos) : "").append(parts).build();
     }
 
-    private static boolean applyStyle(TextBuilder builder, EnumChatFormatting formatting) {
+    private static boolean applyStyle(Text.Builder builder, EnumChatFormatting formatting) {
         switch (formatting) {
             case BOLD:
                 builder.style(TextStyles.BOLD);
@@ -180,6 +137,8 @@ public class LegacyTextRepresentation implements TextRepresentation {
 
         return false;
     }
+
+
 
     public static String replace(String text, char from, char to) {
         int pos = text.indexOf(from);
@@ -232,4 +191,6 @@ public class LegacyTextRepresentation implements TextRepresentation {
 
         return result.append(text, pos, text.length()).toString();
     }
+
+
 }

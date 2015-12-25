@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.scoreboard;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
 import org.spongepowered.api.scoreboard.Score;
@@ -33,7 +35,7 @@ import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
 import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayModes;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.interfaces.IMixinScoreObjective;
 import org.spongepowered.common.interfaces.IMixinScoreboard;
 
@@ -58,7 +60,7 @@ public class SpongeObjective implements Objective {
     @SuppressWarnings("deprecation")
     public SpongeObjective(String name, Criterion criterion) {
         this.name = name;
-        this.displayName = Texts.legacy().fromUnchecked(name);
+        this.displayName = TextSerializers.LEGACY.parse(name);
         this.displayMode = ObjectiveDisplayModes.INTEGER;
         this.criterion = criterion;
     }
@@ -66,7 +68,7 @@ public class SpongeObjective implements Objective {
     @SuppressWarnings("deprecation")
     public static SpongeObjective fromScoreObjective(ScoreObjective scoreObjective) {
         SpongeObjective objective = new SpongeObjective(scoreObjective.getName(), (Criterion) scoreObjective.getCriteria());
-        objective.setDisplayName(Texts.legacy().fromUnchecked(scoreObjective.getDisplayName()));
+        objective.setDisplayName(LEGACY.parse(scoreObjective.getDisplayName()));
         objective.setDisplayMode((ObjectiveDisplayMode) (Object) scoreObjective.getRenderType());
         return objective;
     }
@@ -91,7 +93,7 @@ public class SpongeObjective implements Objective {
     private void updateDisplayName() {
         this.allowRecursion = false;
         for (ScoreObjective objective: this.objectives.values()) {
-            objective.setDisplayName(Texts.legacy().to(this.displayName));
+            objective.setDisplayName(this.displayName.to(LEGACY));
         }
         this.allowRecursion = true;
     }
@@ -169,7 +171,7 @@ public class SpongeObjective implements Objective {
 
         this.objectives.put(scoreboard, objective);
 
-        objective.setDisplayName(Texts.legacy().to(this.displayName));
+        objective.setDisplayName(this.displayName.to(LEGACY));
         objective.setRenderType((IScoreObjectiveCriteria.EnumRenderType) (Object) this.displayMode);
         this.addScoresToObjective(objective);
 

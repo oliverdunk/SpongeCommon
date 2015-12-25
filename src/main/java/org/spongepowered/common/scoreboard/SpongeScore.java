@@ -24,12 +24,13 @@
  */
 package org.spongepowered.common.scoreboard;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import com.google.common.collect.Maps;
 import net.minecraft.scoreboard.ScoreObjective;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.common.interfaces.IMixinScore;
 import org.spongepowered.common.interfaces.IMixinScoreObjective;
 
@@ -101,7 +102,7 @@ public class SpongeScore implements Score {
             throw new IllegalArgumentException("A score already exists with the name " + this.name);
         }
 
-        String name = Texts.legacy().to(this.name);
+        String name = this.name.to(LEGACY);
 
         net.minecraft.scoreboard.Score score = new net.minecraft.scoreboard.Score(scoreObjective.theScoreboard, scoreObjective, name);
         ((IMixinScore) score).setSpongeCreated();
@@ -122,7 +123,7 @@ public class SpongeScore implements Score {
 
     @SuppressWarnings("deprecation")
     public void removeFromScoreObjective(ScoreObjective objective) {
-        objective.theScoreboard.removeObjectiveFromEntity(Texts.legacy().to(this.name), objective);
+        objective.theScoreboard.removeObjectiveFromEntity(this.name.to(LEGACY), objective);
     }
 
     public net.minecraft.scoreboard.Score getScore(ScoreObjective objective) {

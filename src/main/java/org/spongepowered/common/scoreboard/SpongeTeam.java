@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.scoreboard;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.EnumChatFormatting;
 import org.spongepowered.api.scoreboard.Scoreboard;
@@ -31,9 +33,9 @@ import org.spongepowered.api.scoreboard.Team;
 import org.spongepowered.api.scoreboard.Visibilities;
 import org.spongepowered.api.scoreboard.Visibility;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.interfaces.IMixinScoreboard;
 import org.spongepowered.common.interfaces.IMixinTeam;
 import org.spongepowered.common.text.format.SpongeTextColor;
@@ -51,8 +53,8 @@ public class SpongeTeam implements Team {
     private String name;
     private Text displayName;
     private TextColor color = TextColors.RESET;
-    private Text prefix = Texts.of();
-    private Text suffix = Texts.of();
+    private Text prefix = Text.of();
+    private Text suffix = Text.of();
 
     private boolean allowFriendlyFire = true;
     private boolean seeFriendlyInvisibles = true;
@@ -79,7 +81,7 @@ public class SpongeTeam implements Team {
     @SuppressWarnings("deprecation")
     public SpongeTeam(String name) {
         this.name = name;
-        this.displayName = Texts.legacy().fromUnchecked(name);
+        this.displayName = TextSerializers.LEGACY.parse(name);
     }
 
     @Override
@@ -115,7 +117,7 @@ public class SpongeTeam implements Team {
     @Override
     @SuppressWarnings("deprecation")
     public void setDisplayName(Text displayName) throws IllegalArgumentException {
-        if (Texts.legacy().to(displayName).length() > 32) {
+        if (displayName.to(LEGACY).length() > 32) {
             throw new IllegalArgumentException("Team display name length cannot be greater than 32 characters!");
         }
         this.displayName = displayName;
@@ -125,7 +127,7 @@ public class SpongeTeam implements Team {
     @SuppressWarnings("deprecation")
     private void updateDisplayName() {
         this.allowRecursion = false;
-        String displayName = Texts.legacy().to(this.displayName);
+        String displayName = this.displayName.to(LEGACY);
         for (ScorePlayerTeam team: this.teams.values()) {
             team.setTeamName(displayName);
         }
@@ -140,7 +142,7 @@ public class SpongeTeam implements Team {
     @Override
     @SuppressWarnings("deprecation")
     public void setPrefix(Text prefix) throws IllegalArgumentException {
-        if (Texts.legacy().to(prefix).length() > 16) {
+        if (prefix.to(LEGACY).length() > 16) {
             throw new IllegalArgumentException("Prefix length cannot be greater than 16 characters!");
         }
         this.prefix = prefix;
@@ -150,7 +152,7 @@ public class SpongeTeam implements Team {
     @SuppressWarnings("deprecation")
     private void updatePrefix() {
         this.allowRecursion = false;
-        String prefix = Texts.legacy().to(this.prefix);
+        String prefix = this.prefix.to(LEGACY);
         for (ScorePlayerTeam team: this.teams.values()) {
             team.setNamePrefix(prefix);
         }
@@ -165,7 +167,7 @@ public class SpongeTeam implements Team {
     @Override
     @SuppressWarnings("deprecation")
     public void setSuffix(Text suffix) throws IllegalArgumentException {
-        if (Texts.legacy().to(suffix).length() > 16) {
+        if (suffix.to(LEGACY).length() > 16) {
             throw new IllegalArgumentException("Suffix length cannot be greater than 16 characters!");
         }
         this.suffix = suffix;
@@ -175,7 +177,7 @@ public class SpongeTeam implements Team {
     @SuppressWarnings("deprecation")
     private void updateSuffix() {
         this.allowRecursion = false;
-        String suffix = Texts.legacy().to(this.suffix);
+        String suffix = this.suffix.to(LEGACY);
         for (ScorePlayerTeam team: this.teams.values()) {
             team.setNameSuffix(suffix);
         }
@@ -307,17 +309,17 @@ public class SpongeTeam implements Team {
 
         this.teams.put(scoreboard, team);
 
-        team.setTeamName(Texts.legacy().to(this.displayName));
+        team.setTeamName(this.displayName.to(LEGACY));
         team.setSeeFriendlyInvisiblesEnabled(this.seeFriendlyInvisibles);
         team.setAllowFriendlyFire(this.allowFriendlyFire);
         team.setChatFormat(((SpongeTextColor) this.color).getHandle());
-        team.setNamePrefix(Texts.legacy().to(this.prefix));
-        team.setNameSuffix(Texts.legacy().to(this.suffix));
+        team.setNamePrefix(this.prefix.to(LEGACY));
+        team.setNameSuffix(this.suffix.to(LEGACY));
         team.setNameTagVisibility(((SpongeVisibility) this.nameTagVisibility).getHandle());
         team.setDeathMessageVisibility(((SpongeVisibility) this.deathMessageVisibility).getHandle());
 
         for (Text member: this.members) {
-            scoreboard.addPlayerToTeam(Texts.legacy().to(member), team.getRegisteredName());
+            scoreboard.addPlayerToTeam(member.to(LEGACY), team.getRegisteredName());
         }
 
     }

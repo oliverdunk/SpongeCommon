@@ -153,9 +153,6 @@ public final class CommonModuleRegistry {
         final List<FactoryRegistry<?, ?>> factoryRegistries = new ArrayList<>();
         factoryRegistries.add(new MessageSinkFactoryModule());
         factoryRegistries.add(new ResourcePackFactoryModule());
-        factoryRegistries.add(new SelectorFactoryModule());
-        factoryRegistries.add(new SelectorFactoryModule());
-        factoryRegistries.add(new TextFactoryModule());
         factoryRegistries.add(new TimingsFactoryModule());
 
         try {

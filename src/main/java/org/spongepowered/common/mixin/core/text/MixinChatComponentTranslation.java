@@ -27,8 +27,7 @@ package org.spongepowered.common.mixin.core.text;
 import com.google.common.collect.Iterators;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
-import org.spongepowered.api.text.TextBuilder;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -59,11 +58,11 @@ public abstract class MixinChatComponentTranslation extends MixinChatComponentSt
     @Shadow abstract void ensureInitialized();
 
     @Override
-    protected TextBuilder createBuilder() {
+    protected Text.Builder createBuilder() {
         if (this.translation == null) {
             this.translation = new SpongeTranslation(this.key);
         }
-        return Texts.builder(this.translation, wrapFormatArgs(this.formatArgs));
+        return Text.builder(this.translation, wrapFormatArgs(this.formatArgs));
     }
 
     @Override

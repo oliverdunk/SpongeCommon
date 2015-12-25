@@ -22,18 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.text.xml;
+package org.spongepowered.common.text.serializer.xml;
 
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextBuilder;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.TranslatableText;
 import org.spongepowered.api.text.action.ClickAction;
 import org.spongepowered.api.text.action.ShiftClickAction;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.format.TextStyles;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.common.interfaces.text.IMixinClickEvent;
 import org.spongepowered.common.interfaces.text.IMixinHoverEvent;
@@ -61,7 +62,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
         Color.class,
         I.class,
         Obfuscated.class,
-        Placeholder.class,
         Strikethrough.class,
         Span.class,
         Tr.class,
@@ -82,11 +82,11 @@ public abstract class Element {
     @XmlMixed
     protected List<Object> mixedContent = new ArrayList<>();
 
-    protected abstract void modifyBuilder(TextBuilder builder);
+    protected abstract void modifyBuilder(Text.Builder builder);
 
     private static final Pattern FUNCTION_PATTERN = Pattern.compile("^([^(]+)\\('(.*)'\\)$");
 
-    protected void applyTextActions(TextBuilder builder) throws Exception {
+    protected void applyTextActions(Text.Builder builder) throws Exception {
         if (this.onClick != null) {
             final Matcher matcher = FUNCTION_PATTERN.matcher(this.onClick);
             if (!matcher.matches()) {
@@ -134,19 +134,19 @@ public abstract class Element {
             }
 
             if (enumClickAction == HoverEvent.Action.SHOW_TEXT) {
-                builder.onHover(TextActions.showText(TextXmlRepresentation.INSTANCE.from(eventString)));
+                builder.onHover(TextActions.showText(TextSerializers.TEXT_XML.parse(eventString)));
             } else {
                 builder.onHover(((IMixinHoverEvent) new HoverEvent(enumClickAction,
-                        SpongeTexts.toComponent(TextXmlRepresentation.INSTANCE.from(eventString)))).getHandle());
+                        SpongeTexts.toComponent(TextSerializers.TEXT_XML.parse(eventString)))).getHandle());
             }
         }
 
     }
 
-    public TextBuilder toText() throws Exception {
-        TextBuilder builder;
+    public Text.Builder toText() throws Exception {
+        Text.Builder builder;
         if (this.mixedContent.size() == 0) {
-            builder = Texts.builder();
+            builder = Text.builder();
         } else if (this.mixedContent.size() == 1) { // then we are a thin wrapper around the child
             builder = builderFromObject(this.mixedContent.get(0));
         } else {
@@ -154,7 +154,7 @@ public abstract class Element {
                 builder = builderFromObject(this.mixedContent.get(0));
                 this.mixedContent.remove(0);
             } else {
-                builder = Texts.builder();
+                builder = Text.builder();
             }
             for (Object child : this.mixedContent) {
                 builder.append(builderFromObject(child).build());
@@ -167,9 +167,9 @@ public abstract class Element {
         return builder;
     }
 
-    protected TextBuilder builderFromObject(Object o) throws Exception {
+    protected Text.Builder builderFromObject(Object o) throws Exception {
         if (o instanceof String) {
-            return Texts.builder(String.valueOf(o).replace('\u000B', ' '));
+            return Text.builder(String.valueOf(o).replace('\u000B', ' '));
         } else if (o instanceof Element) {
             return ((Element) o).toText();
         } else {
@@ -222,7 +222,8 @@ public abstract class Element {
 
         if (text.getHoverAction().isPresent()) {
             HoverEvent nmsEvent = SpongeHoverAction.getHandle(text.getHoverAction().get(), locale);
-            currentElement.onHover = nmsEvent.getAction().getCanonicalName() + "('" + TextXmlRepresentation.INSTANCE.to(SpongeTexts.toText(nmsEvent.getValue()), locale) + "')";
+            currentElement.onHover = nmsEvent.getAction().getCanonicalName() + "('" +
+                    TextSerializers.TEXT_XML.serialize(SpongeTexts.toText(nmsEvent.getValue()), locale) + "')";
         }
 
         if (text.getShiftClickAction().isPresent()) {
@@ -233,23 +234,16 @@ public abstract class Element {
             currentElement.onShiftClick = "insert_text('" + action.getResult() + ')';
         }
 
-        if (text instanceof Text.Placeholder) {
-            Text.Placeholder textPlaceholder = (Text.Placeholder) text;
-            Placeholder placeholder = new Placeholder(textPlaceholder.getKey());
-            if (textPlaceholder.getFallback().isPresent()) {
-                placeholder.mixedContent.add(Element.fromText(textPlaceholder.getFallback().get(), locale));
-            }
-            update(fixedRoot, currentElement, placeholder);
-        } else if (text instanceof Text.Literal) {
-            currentElement.mixedContent.add(((Text.Literal) text).getContent());
-        } else if (text instanceof Text.Translatable) {
-            Translation transl = ((Text.Translatable) text).getTranslation();
+        if (text instanceof LiteralText) {
+            currentElement.mixedContent.add(((LiteralText) text).getContent());
+        } else if (text instanceof TranslatableText) {
+            Translation transl = ((TranslatableText) text).getTranslation();
             if (transl instanceof SpongeTranslation) {
                 currentElement = update(fixedRoot, currentElement, new Tr(transl.getId()));
             } else {
                 currentElement = update(fixedRoot, currentElement, new Tr(transl.get(locale)));
             }
-            for (Object o : ((Text.Translatable) text).getArguments()) {
+            for (Object o : ((TranslatableText) text).getArguments()) {
                 if (o instanceof Text) {
                     currentElement.mixedContent.add(Element.fromText(((Text) o), locale));
                 } else {

@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.data.processor.data.item;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,7 +37,7 @@ import org.spongepowered.api.data.manipulator.mutable.item.AuthorData;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.data.manipulator.mutable.item.SpongeAuthorData;
 import org.spongepowered.common.data.processor.common.AbstractItemSingleDataProcessor;
 import org.spongepowered.common.data.util.NbtDataUtil;
@@ -65,7 +67,7 @@ public class ItemAuthorDataProcessor extends AbstractItemSingleDataProcessor<Tex
         if (!itemStack.hasTagCompound()) {
             itemStack.setTagCompound(new NBTTagCompound());
         }
-        itemStack.getTagCompound().setString(NbtDataUtil.ITEM_BOOK_AUTHOR, Texts.legacy().to(value));
+        itemStack.getTagCompound().setString(NbtDataUtil.ITEM_BOOK_AUTHOR, value.to(LEGACY));
         return true;
     }
 
@@ -75,7 +77,7 @@ public class ItemAuthorDataProcessor extends AbstractItemSingleDataProcessor<Tex
             return Optional.empty();
         }
         final String json = itemStack.getTagCompound().getString(NbtDataUtil.ITEM_BOOK_AUTHOR);
-        final Text author = Texts.json().fromUnchecked(json);
+        final Text author = TextSerializers.JSON.parse(json);
         return Optional.of(author);
     }
 

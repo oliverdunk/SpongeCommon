@@ -33,7 +33,7 @@ import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.critieria.Criterion;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.objective.Objective;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.TextMessageException;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -97,7 +97,7 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
         if (this.shouldEcho()) {
             this.scoreboard.allowRecursion = false;
             if (objective == null) {
-                for (Score score: this.scoreboard.getScores(Texts.legacy().fromUnchecked(name))) {
+                for (Score score: this.scoreboard.getScores(TextSerializers.LEGACY.parse(name))) {
                     for (Objective spongeObjective: score.getObjectives()) {
                         spongeObjective.removeScore(score);
                     }
@@ -105,7 +105,7 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
             } else {
                 SpongeObjective spongeObjective = ((IMixinScoreObjective) objective).getSpongeObjective();
                 if (spongeObjective != null) {
-                    spongeObjective.removeScore(spongeObjective.getScore(Texts.legacy().fromUnchecked(name)));
+                    spongeObjective.removeScore(spongeObjective.getScore(TextSerializers.LEGACY.parse(name)));
                 }
             }
             this.scoreboard.allowRecursion = true;
@@ -172,7 +172,7 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
             SpongeTeam spongeTeam = ((IMixinTeam) team).getSpongeTeam();
             if (spongeTeam != null) {
                 this.scoreboard.allowRecursion = false;
-                spongeTeam.addMember(Texts.legacy().from(player));
+                spongeTeam.addMember(TextSerializers.LEGACY.parse(player));
                 this.scoreboard.allowRecursion = true;
                 ci.setReturnValue(true);
             }
@@ -186,7 +186,7 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
             SpongeTeam spongeTeam = ((IMixinTeam) team).getSpongeTeam();
             if (spongeTeam != null) {
                     this.scoreboard.allowRecursion = false;
-                    spongeTeam.removeMember(Texts.legacy().from(name));
+                    spongeTeam.removeMember(TextSerializers.LEGACY.parse(name));
                     this.scoreboard.allowRecursion = true;
                     ci.cancel();
             }
@@ -199,8 +199,8 @@ public abstract class MixinScoreboard implements IMixinScoreboard {
         if (shouldEcho() && score == null) {
             this.scoreboard.allowRecursion = false;
             @SuppressWarnings("deprecation")
-            SpongeScore spongeScore = (SpongeScore) ((IMixinScoreObjective) objective).getSpongeObjective().getScore(Texts.legacy().fromUnchecked(
-                    name));
+            SpongeScore spongeScore = (SpongeScore) ((IMixinScoreObjective) objective).getSpongeObjective().getScore(
+                    TextSerializers.LEGACY.parse(name));
             this.scoreboard.allowRecursion = true;
             cir.setReturnValue(spongeScore.getScore(objective));
         }

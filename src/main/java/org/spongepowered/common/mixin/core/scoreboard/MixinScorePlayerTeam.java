@@ -31,7 +31,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.text.sink.MessageSink;
 import org.spongepowered.api.text.sink.MessageSinks;
 import org.spongepowered.api.command.CommandSource;
@@ -85,7 +85,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
     public void onSetTeamName(String name, CallbackInfo ci) {
         if (this.shouldEcho()) {
             this.spongeTeam.allowRecursion = false;
-            this.spongeTeam.setDisplayName(Texts.legacy().fromUnchecked(name));
+            this.spongeTeam.setDisplayName(TextSerializers.LEGACY.parse(name));
             this.spongeTeam.allowRecursion = true;
             ci.cancel();
         }
@@ -96,7 +96,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
     public void onSetNamePrefix(String prefix, CallbackInfo ci) {
         if (this.shouldEcho()) {
             this.spongeTeam.allowRecursion = false;
-            this.spongeTeam.setPrefix(Texts.legacy().fromUnchecked(prefix));
+            this.spongeTeam.setPrefix(TextSerializers.LEGACY.parse(prefix));
             this.spongeTeam.allowRecursion = true;
             ci.cancel();
         }
@@ -107,7 +107,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
     public void onSetNameSuffix(String suffix, CallbackInfo ci) {
         if (this.shouldEcho()) {
             this.spongeTeam.allowRecursion = false;
-            this.spongeTeam.setSuffix(Texts.legacy().fromUnchecked(suffix));
+            this.spongeTeam.setSuffix(TextSerializers.LEGACY.parse(suffix));
             this.spongeTeam.allowRecursion = true;
             ci.cancel();
         }

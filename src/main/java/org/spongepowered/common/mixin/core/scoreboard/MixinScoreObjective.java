@@ -28,7 +28,7 @@ import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -60,7 +60,7 @@ public abstract class MixinScoreObjective implements IMixinScoreObjective {
     public void onSetDisplayName(String name, CallbackInfo ci) {
         if (this.shouldEcho()) {
             this.spongeObjective.allowRecursion = false;
-            this.spongeObjective.setDisplayName(Texts.legacy().fromUnchecked(name));
+            this.spongeObjective.setDisplayName(TextSerializers.LEGACY.parse(name));
             this.spongeObjective.allowRecursion = true;
             ci.cancel();
         }
@@ -77,6 +77,7 @@ public abstract class MixinScoreObjective implements IMixinScoreObjective {
     }
 
     private boolean shouldEcho() {
-        return (((IMixinScoreboard) this.theScoreboard).echoToSponge() || (this.spongeObjective.getScoreboards().size() == 1)) && this.spongeObjective.allowRecursion;
+        return (((IMixinScoreboard) this.theScoreboard).echoToSponge()
+                || (this.spongeObjective.getScoreboards().size() == 1)) && this.spongeObjective.allowRecursion;
     }
 }

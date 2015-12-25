@@ -32,7 +32,6 @@ import org.spongepowered.api.text.selector.ArgumentType;
 import org.spongepowered.api.text.selector.Selector;
 import org.spongepowered.api.text.selector.SelectorBuilder;
 import org.spongepowered.api.text.selector.SelectorType;
-import org.spongepowered.api.text.selector.Selectors;
 import org.spongepowered.api.util.annotation.NonnullByDefault;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.world.Location;
@@ -148,7 +147,7 @@ public class SpongeSelector implements Selector {
 
     @Override
     public SelectorBuilder builder() {
-        SelectorBuilder builder = Selectors.builder(getType());
+        SelectorBuilder builder = Selector.builder(getType());
         builder.add(getArguments());
         return builder;
     }

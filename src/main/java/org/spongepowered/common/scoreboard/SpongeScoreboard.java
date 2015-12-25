@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.scoreboard;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -40,7 +42,7 @@ import org.spongepowered.api.scoreboard.critieria.Criterion;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.interfaces.IMixinScoreboard;
 import org.spongepowered.common.text.format.SpongeTextColor;
@@ -187,7 +189,7 @@ public class SpongeScoreboard implements Scoreboard {
         }
         this.memberTeams.put(member, team);
         for (ScorePlayerTeam scoreTeam: ((SpongeTeam) team).getTeams().values()) {
-            scoreTeam.theScoreboard.addPlayerToTeam(Texts.legacy().to(member), team.getName());
+            scoreTeam.theScoreboard.addPlayerToTeam(member.to(LEGACY), team.getName());
         }
         this.allowRecursion = true;
     }
@@ -196,8 +198,8 @@ public class SpongeScoreboard implements Scoreboard {
     public void removeMemberFromTeam(Text member) {
         if (this.memberTeams.containsKey(member)) {
             for (ScorePlayerTeam scoreTeam : ((SpongeTeam) this.memberTeams.get(member)).getTeams().values()) {
-                if (scoreTeam.theScoreboard.getPlayersTeam(Texts.legacy().to(member)) != null) {
-                    scoreTeam.theScoreboard.removePlayerFromTeam(Texts.legacy().to(member), scoreTeam);
+                if (scoreTeam.theScoreboard.getPlayersTeam(member.to(LEGACY)) != null) {
+                    scoreTeam.theScoreboard.removePlayerFromTeam(member.to(LEGACY), scoreTeam);
                 }
             }
         }
@@ -283,11 +285,11 @@ public class SpongeScoreboard implements Scoreboard {
     private void setObjectives(net.minecraft.scoreboard.Scoreboard scoreboard, Scoreboard spongeScoreboard) {
         for (Objective objective: spongeScoreboard.getObjectives()) {
             ScoreObjective scoreObjective = scoreboard.addScoreObjective(objective.getName(), ((IScoreObjectiveCriteria) objective.getCriterion()));
-            scoreObjective.setDisplayName(Texts.legacy().to(objective.getDisplayName()));
+            scoreObjective.setDisplayName(objective.getDisplayName().to(LEGACY));
             scoreObjective.setRenderType((IScoreObjectiveCriteria.EnumRenderType) (Object) objective.getDisplayMode());
 
             for (Score spongeScore: objective.getScores().values()) {
-                net.minecraft.scoreboard.Score score = scoreboard.getValueFromObjective(Texts.legacy().to(spongeScore.getName()), scoreObjective);
+                net.minecraft.scoreboard.Score score = scoreboard.getValueFromObjective(spongeScore.getName().to(LEGACY), scoreObjective);
                 score.setScorePoints(spongeScore.getScore());
             }
         }
@@ -306,17 +308,17 @@ public class SpongeScoreboard implements Scoreboard {
     private void setTeams(net.minecraft.scoreboard.Scoreboard scoreboard, Scoreboard spongeScoreboard) {
         for (Team spongeTeam: spongeScoreboard.getTeams()) {
             ScorePlayerTeam team = scoreboard.createTeam(spongeTeam.getName());
-            team.setTeamName(Texts.legacy().to(spongeTeam.getDisplayName()));
+            team.setTeamName(spongeTeam.getDisplayName().to(LEGACY));
             team.setChatFormat(((SpongeTextColor) spongeTeam.getColor()).getHandle());
-            team.setNamePrefix(Texts.legacy().to(spongeTeam.getPrefix()));
-            team.setNameSuffix(Texts.legacy().to(spongeTeam.getSuffix()));
+            team.setNamePrefix(spongeTeam.getPrefix().to(LEGACY));
+            team.setNameSuffix(spongeTeam.getSuffix().to(LEGACY));
             team.setAllowFriendlyFire(spongeTeam.allowFriendlyFire());
             team.setSeeFriendlyInvisiblesEnabled(spongeTeam.canSeeFriendlyInvisibles());
             team.setNameTagVisibility(((SpongeVisibility) spongeTeam.getNameTagVisibility()).getHandle());
             team.setDeathMessageVisibility(((SpongeVisibility) spongeTeam.getDeathTextVisibility()).getHandle());
 
             for (Text member: spongeTeam.getMembers()) {
-                scoreboard.addPlayerToTeam(Texts.legacy().to(member), team.getRegisteredName());
+                scoreboard.addPlayerToTeam(member.to(LEGACY), team.getRegisteredName());
             }
         }
     }

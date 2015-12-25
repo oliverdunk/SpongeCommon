@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.data.processor.value.tileentity;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.world.IWorldNameable;
 import org.spongepowered.api.data.DataTransactionResult;
 import org.spongepowered.api.data.key.Keys;
@@ -31,7 +33,7 @@ import org.spongepowered.api.data.value.ValueContainer;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.data.processor.common.AbstractSpongeValueProcessor;
 import org.spongepowered.common.data.util.DataConstants;
@@ -49,14 +51,14 @@ public class TileEntityDisplayNameValueProcessor extends AbstractSpongeValueProc
 
     @Override
     protected Value<Text> constructValue(Text defaultValue) {
-        return new SpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), defaultValue);
+        return new SpongeValue<>(Keys.DISPLAY_NAME, Text.of(), defaultValue);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected boolean set(IWorldNameable container, Text value) {
         if (container instanceof IMixinCustomNameable) {
-            final String legacy = Texts.legacy().to(value);
+            final String legacy = value.to(LEGACY);
             try {
                 ((IMixinCustomNameable) container).setCustomDisplayName(legacy);
             } catch (Exception e) {
@@ -70,14 +72,14 @@ public class TileEntityDisplayNameValueProcessor extends AbstractSpongeValueProc
     @Override
     protected Optional<Text> getVal(IWorldNameable container) {
         if (container.hasCustomName()) {
-            return Optional.of(Texts.legacy().fromUnchecked(container.getCommandSenderName()));
+            return Optional.of(LEGACY.parse(container.getCommandSenderName()));
         }
         return Optional.empty();
     }
 
     @Override
     protected ImmutableValue<Text> constructImmutableValue(Text value) {
-        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), value);
+        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Text.of(), value);
     }
 
     @Override

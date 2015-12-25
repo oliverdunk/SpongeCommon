@@ -32,7 +32,7 @@ import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScoreboardSaveData;
 import net.minecraft.world.WorldSavedData;
 import org.spongepowered.api.scoreboard.Scoreboard;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -93,7 +93,7 @@ public abstract class MixinScoreboardSaveData extends WorldSavedData implements 
             UUID uuid = new UUID(nbttagcompound.getLong(SPONGE_SCORE_UUID_MOST), nbttagcompound.getLong(SPONGE_SCORE_UUID_LEAST));
             SpongeScore spongeScore = this.scoreMap.get(uuid);
             if (spongeScore == null) {
-                spongeScore = new SpongeScore(Texts.legacy().fromUnchecked(nbttagcompound.getString("Name")));
+                spongeScore = new SpongeScore(TextSerializers.LEGACY.parse(nbttagcompound.getString("Name")));
                 this.scoreMap.put(uuid, spongeScore);
             }
             ((IMixinScoreObjective) objective).getSpongeObjective().addScore(spongeScore);

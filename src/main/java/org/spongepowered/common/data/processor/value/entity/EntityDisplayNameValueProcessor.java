@@ -24,6 +24,8 @@
  */
 package org.spongepowered.common.data.processor.value.entity;
 
+import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.spongepowered.api.data.DataTransactionResult;
@@ -32,7 +34,7 @@ import org.spongepowered.api.data.value.ValueContainer;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.data.processor.common.AbstractSpongeValueProcessor;
 import org.spongepowered.common.data.util.DataConstants;
@@ -49,13 +51,13 @@ public class EntityDisplayNameValueProcessor extends AbstractSpongeValueProcesso
 
     @Override
     protected Value<Text> constructValue(Text defaultValue) {
-        return new SpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), defaultValue);
+        return new SpongeValue<>(Keys.DISPLAY_NAME, Text.of(), defaultValue);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected boolean set(Entity container, Text value) {
-        final String legacy = Texts.legacy().to(value);
+        final String legacy = value.to(LEGACY);
         container.setCustomNameTag(legacy);
         return true;
     }
@@ -64,14 +66,14 @@ public class EntityDisplayNameValueProcessor extends AbstractSpongeValueProcesso
     @Override
     protected Optional<Text> getVal(Entity container) {
         if (container instanceof EntityPlayer) {
-            return Optional.of(Texts.legacy().fromUnchecked(container.getCommandSenderName()));
+            return Optional.of(LEGACY.parse(container.getCommandSenderName()));
         }
-        return Optional.of(Texts.legacy().fromUnchecked(container.getCustomNameTag()));
+        return Optional.of(LEGACY.parse(container.getCustomNameTag()));
     }
 
     @Override
     protected ImmutableValue<Text> constructImmutableValue(Text value) {
-        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Texts.of(), value);
+        return new ImmutableSpongeValue<>(Keys.DISPLAY_NAME, Text.of(), value);
     }
 
     @Override

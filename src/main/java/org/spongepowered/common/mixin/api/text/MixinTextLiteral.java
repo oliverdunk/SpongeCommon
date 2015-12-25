@@ -26,13 +26,13 @@ package org.spongepowered.common.mixin.api.text;
 
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
-import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Locale;
 
-@Mixin(value = Text.Literal.class, remap = false)
+@Mixin(value = LiteralText.class, remap = false)
 public abstract class MixinTextLiteral extends MixinText {
 
     @Shadow protected String content;
