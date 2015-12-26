@@ -138,8 +138,6 @@ public final class LegacyTexts {
         return false;
     }
 
-
-
     public static String replace(String text, char from, char to) {
         int pos = text.indexOf(from);
         int last = text.length() - 1;
@@ -158,10 +156,18 @@ public final class LegacyTexts {
     }
 
     public static String strip(String text, char code) {
-        return strip(text, code, false);
+        return strip(text, code, false, false);
     }
 
-    public static String strip(String text, char code, boolean all) {
+    public static String stripAll(String text, char code) {
+        return strip(text, code, true, false);
+    }
+
+    public static String stripChars(String text, char code) {
+        return strip(text, code, false, true);
+    }
+
+    private static String strip(String text, char code, boolean all, boolean keepFormat) {
         int next = text.indexOf(code);
         int last = text.length() - 1;
         if (next == -1 || next == last) {
@@ -179,7 +185,7 @@ public final class LegacyTexts {
             pos = next;
 
             if (isFormat(text.charAt(next + 1))) {
-                pos = next += 2; // Skip formatting
+                pos = next += keepFormat ? 1 : 2; // Skip formatting
             } else if (all) {
                 pos = next += 1; // Skip code only
             } else {

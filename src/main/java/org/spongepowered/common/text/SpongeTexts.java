@@ -30,9 +30,9 @@ import static org.spongepowered.api.text.serializer.TextSerializers.LEGACY;
 import com.google.common.collect.Lists;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.interfaces.text.IMixinChatComponent;
 import org.spongepowered.common.interfaces.text.IMixinText;
 
@@ -78,19 +78,18 @@ public final class SpongeTexts {
         return ((IMixinText) text).getLegacyFormatting();
     }
 
-    public static Text fixActionBarFormatting(Text text) {
-        Text result = text;
-        if (!text.getChildren().isEmpty()) {
-            Text.Builder fixed = text.builder().removeAll();
-
-            for (Text child : text.getChildren()) {
-                fixed.append(fixActionBarFormatting(child));
+    @SuppressWarnings("unchecked")
+    public static IChatComponent fixActionBarFormatting(IChatComponent component) {
+        if (!component.getSiblings().isEmpty()) {
+            List<IChatComponent> children = component.getSiblings();
+            for (int i = 0; i < children.size(); i++) {
+                children.set(i, fixActionBarFormatting(children.get(i)));
             }
-
-            result = fixed.build();
         }
 
-        return Text.builder(getLegacyFormatting(text)).append(result).build();
+        ChatComponentText result = new ChatComponentText(((IMixinChatComponent) component).getLegacyFormatting());
+        result.appendSibling(component);
+        return result;
     }
 
     public static List<String> asJson(List<Text> list) {

@@ -24,11 +24,14 @@
  */
 package org.spongepowered.common.mixin.api.text;
 
+import static org.spongepowered.common.text.SpongeTexts.COLOR_CHAR;
+
 import net.minecraft.util.ChatComponentStyle;
 import net.minecraft.util.ChatComponentText;
 import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.common.text.serializer.LegacyTexts;
 
 import java.util.Locale;
 
@@ -39,7 +42,8 @@ public abstract class MixinTextLiteral extends MixinText {
 
     @Override
     protected ChatComponentStyle createComponent(Locale locale) {
-        return new ChatComponentText(this.content);
+        // TODO: Make sure this doesn't break anything else
+        return new ChatComponentText(LegacyTexts.stripChars(this.content, COLOR_CHAR));
     }
 
 }
