@@ -166,7 +166,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
 
     @Override
     public void sendMessage(ChatType type, Text message) {
-        IChatComponent component = SpongeTexts.toComponent(message, getLocale());
+        IChatComponent component = SpongeTexts.toComponent(message);
         if (type == ChatTypes.ACTION_BAR) {
             component = SpongeTexts.fixActionBarFormatting(component);
         }
@@ -338,7 +338,7 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
 
     @Override
     public void kick(Text message) {
-        final IChatComponent component = SpongeTexts.toComponent(message, getLocale());
+        final IChatComponent component = SpongeTexts.toComponent(message);
         PlayerKickHelper.kickPlayer((EntityPlayerMP) (Object) this, component);
     }
 

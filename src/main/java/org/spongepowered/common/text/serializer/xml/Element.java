@@ -177,7 +177,7 @@ public abstract class Element {
         }
     }
 
-    public static Element fromText(Text text, Locale locale) {
+    public static Element fromText(Text text) {
         final AtomicReference<Element> fixedRoot = new AtomicReference<>();
         Element currentElement = null;
         if (text.getColor() != TextColors.NONE) {
@@ -221,9 +221,9 @@ public abstract class Element {
         }
 
         if (text.getHoverAction().isPresent()) {
-            HoverEvent nmsEvent = SpongeHoverAction.getHandle(text.getHoverAction().get(), locale);
+            HoverEvent nmsEvent = SpongeHoverAction.getHandle(text.getHoverAction().get());
             currentElement.onHover = nmsEvent.getAction().getCanonicalName() + "('" +
-                    TextSerializers.TEXT_XML.serialize(SpongeTexts.toText(nmsEvent.getValue()), locale) + "')";
+                    TextSerializers.TEXT_XML.serialize(SpongeTexts.toText(nmsEvent.getValue())) + "')";
         }
 
         if (text.getShiftClickAction().isPresent()) {
@@ -238,14 +238,10 @@ public abstract class Element {
             currentElement.mixedContent.add(((LiteralText) text).getContent());
         } else if (text instanceof TranslatableText) {
             Translation transl = ((TranslatableText) text).getTranslation();
-            if (transl instanceof SpongeTranslation) {
-                currentElement = update(fixedRoot, currentElement, new Tr(transl.getId()));
-            } else {
-                currentElement = update(fixedRoot, currentElement, new Tr(transl.get(locale)));
-            }
+            currentElement = update(fixedRoot, currentElement, new Tr(transl.getId()));
             for (Object o : ((TranslatableText) text).getArguments()) {
                 if (o instanceof Text) {
-                    currentElement.mixedContent.add(Element.fromText(((Text) o), locale));
+                    currentElement.mixedContent.add(Element.fromText(((Text) o)));
                 } else {
                     currentElement.mixedContent.add(String.valueOf(o));
                 }
@@ -255,7 +251,7 @@ public abstract class Element {
         }
 
         for (Text child : text.getChildren()) {
-            currentElement.mixedContent.add(Element.fromText(child, locale));
+            currentElement.mixedContent.add(Element.fromText(child));
         }
 
         return fixedRoot.get();

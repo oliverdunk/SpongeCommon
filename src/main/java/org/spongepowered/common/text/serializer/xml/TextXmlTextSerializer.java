@@ -59,12 +59,12 @@ public class TextXmlTextSerializer implements TextSerializer {
     }
 
     @Override
-    public String serialize(Text text, Locale locale) {
+    public String serialize(Text text) {
         final StringWriter writer = new StringWriter();
         try {
             Marshaller marshaller = CONTEXT.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-            marshaller.marshal(Element.fromText(text, locale), writer);
+            marshaller.marshal(Element.fromText(text), writer);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }

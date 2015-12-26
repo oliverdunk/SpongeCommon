@@ -39,7 +39,7 @@ public abstract class MixinTextSelector extends MixinText {
     @Shadow protected Selector selector;
 
     @Override
-    protected ChatComponentStyle createComponent(Locale locale) {
+    protected ChatComponentStyle createComponent() {
         return new ChatComponentSelector(this.selector.toPlain());
     }
 }

@@ -118,7 +118,7 @@ public class PlayerPaginationCalculator implements PaginationCalculator<Player> 
             if (child instanceof LiteralText) {
                 txt = ((LiteralText) child).getContent();
             } else if (child instanceof TranslatableText) {
-                txt = child.toPlain(source.getLocale());
+                txt = child.toPlain();
             } else {
                 continue;
             }

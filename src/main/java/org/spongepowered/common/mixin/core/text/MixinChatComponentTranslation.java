@@ -28,11 +28,9 @@ import com.google.common.collect.Iterators;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.translation.Translation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.common.interfaces.text.IMixinChatComponent;
-import org.spongepowered.common.interfaces.text.IMixinChatComponentTranslation;
 import org.spongepowered.common.text.ChatComponentIterable;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 
@@ -40,29 +38,17 @@ import java.util.Iterator;
 import java.util.List;
 
 @Mixin(ChatComponentTranslation.class)
-public abstract class MixinChatComponentTranslation extends MixinChatComponentStyle implements IMixinChatComponentTranslation {
+public abstract class MixinChatComponentTranslation extends MixinChatComponentStyle {
 
     @Shadow private String key;
     @Shadow private Object[] formatArgs;
-    private Translation translation;
-
-    @Override
-    public void setTranslation(Translation translation) {
-        this.translation = translation;
-        if (translation instanceof SpongeTranslation) {
-            this.key = translation.getId();
-        }
-    }
 
     @Shadow List<IChatComponent> children;
     @Shadow abstract void ensureInitialized();
 
     @Override
     protected Text.Builder createBuilder() {
-        if (this.translation == null) {
-            this.translation = new SpongeTranslation(this.key);
-        }
-        return Text.builder(this.translation, wrapFormatArgs(this.formatArgs));
+        return Text.builder(new SpongeTranslation(this.key), wrapFormatArgs(this.formatArgs));
     }
 
     @Override

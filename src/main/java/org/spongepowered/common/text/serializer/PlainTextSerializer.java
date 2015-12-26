@@ -32,8 +32,8 @@ import java.util.Locale;
 public final class PlainTextSerializer implements SafeTextSerializer {
 
     @Override
-    public String serialize(Text text, Locale locale) {
-        return text.toPlain(locale);
+    public String serialize(Text text) {
+        return text.toPlain();
     }
 
     @Override

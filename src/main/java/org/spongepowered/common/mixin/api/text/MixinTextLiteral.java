@@ -41,7 +41,7 @@ public abstract class MixinTextLiteral extends MixinText {
     @Shadow protected String content;
 
     @Override
-    protected ChatComponentStyle createComponent(Locale locale) {
+    protected ChatComponentStyle createComponent() {
         // TODO: Make sure this doesn't break anything else
         return new ChatComponentText(LegacyTexts.stripChars(this.content, COLOR_CHAR));
     }

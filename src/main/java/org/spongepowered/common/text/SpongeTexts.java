@@ -47,16 +47,8 @@ public final class SpongeTexts {
     private SpongeTexts() {
     }
 
-    public static Locale getDefaultLocale() { // TODO: Get this from the MC client?
-        return Locale.getDefault();
-    }
-
     public static IChatComponent toComponent(Text text) {
-        return toComponent(text, getDefaultLocale());
-    }
-
-    public static IChatComponent toComponent(Text text, Locale locale) {
-        return ((IMixinText) text).toComponent(locale);
+        return ((IMixinText) text).toComponent();
     }
 
     public static Text toText(IChatComponent component) {

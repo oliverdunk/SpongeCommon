@@ -43,8 +43,8 @@ public final class SpongeFormattingCodeTextSerializer implements FormattingCodeT
     }
 
     @Override
-    public String serialize(Text text, Locale locale) {
-        return LegacyTexts.serialize(text, this.formattingChar, locale);
+    public String serialize(Text text) {
+        return LegacyTexts.serialize(text, this.formattingChar);
     }
 
     @Override

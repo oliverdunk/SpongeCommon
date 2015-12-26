@@ -40,8 +40,8 @@ import java.util.Locale;
 public final class JsonTextSerializer implements TextSerializer {
 
     @Override
-    public String serialize(Text text, Locale locale) {
-        return ((IMixinText) text).toJson(locale);
+    public String serialize(Text text) {
+        return ((IMixinText) text).toJson();
     }
 
     @Override
