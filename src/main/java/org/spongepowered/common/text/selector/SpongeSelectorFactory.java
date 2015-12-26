@@ -58,6 +58,11 @@ import java.util.function.Function;
 @NonnullByDefault
 public class SpongeSelectorFactory implements SelectorFactory {
 
+    public static final SpongeSelectorFactory INSTANCE = new SpongeSelectorFactory();
+
+    private SpongeSelectorFactory() {
+    }
+
     private static final Map<String, SelectorType> idToType;
 
     static {

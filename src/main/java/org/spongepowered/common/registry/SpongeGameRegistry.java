@@ -73,6 +73,7 @@ import org.spongepowered.common.registry.type.entity.AITaskTypeModule;
 import org.spongepowered.common.registry.type.world.GeneratorModifierRegistryModule;
 import org.spongepowered.common.registry.util.RegistrationDependency;
 import org.spongepowered.common.registry.util.RegistryModuleLoader;
+import org.spongepowered.common.text.selector.SpongeSelectorFactory;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 import org.spongepowered.common.util.LanguageUtil;
 import org.spongepowered.common.util.graph.DirectedGraph;
@@ -360,8 +361,8 @@ public class SpongeGameRegistry implements GameRegistry {
     }
 
     @Override
-    public SelectorFactory getSelectorFactory() {
-        return null;
+    public SpongeSelectorFactory getSelectorFactory() {
+        return SpongeSelectorFactory.INSTANCE;
     }
 
     @Override
