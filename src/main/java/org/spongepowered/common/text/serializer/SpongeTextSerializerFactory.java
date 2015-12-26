@@ -27,7 +27,12 @@ package org.spongepowered.common.text.serializer;
 import org.spongepowered.api.text.serializer.LegacyTextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializerFactory;
 
-public class SpongeTextSerializerFactory implements TextSerializerFactory {
+public final class SpongeTextSerializerFactory implements TextSerializerFactory {
+
+    public static final TextSerializerFactory INSTANCE = new SpongeTextSerializerFactory();
+
+    private SpongeTextSerializerFactory() {
+    }
 
     @Override
     public LegacyTextSerializer getLegacyTextSerializer(char legacyChar) {

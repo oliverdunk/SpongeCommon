@@ -74,6 +74,7 @@ import org.spongepowered.common.registry.type.world.GeneratorModifierRegistryMod
 import org.spongepowered.common.registry.util.RegistrationDependency;
 import org.spongepowered.common.registry.util.RegistryModuleLoader;
 import org.spongepowered.common.text.selector.SpongeSelectorFactory;
+import org.spongepowered.common.text.serializer.SpongeTextSerializerFactory;
 import org.spongepowered.common.text.translation.SpongeTranslation;
 import org.spongepowered.common.util.LanguageUtil;
 import org.spongepowered.common.util.graph.DirectedGraph;
@@ -357,7 +358,7 @@ public class SpongeGameRegistry implements GameRegistry {
 
     @Override
     public TextSerializerFactory getTextSerializerFactory() {
-        return null;
+        return SpongeTextSerializerFactory.INSTANCE;
     }
 
     @Override
