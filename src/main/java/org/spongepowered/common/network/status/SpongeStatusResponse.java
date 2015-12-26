@@ -37,7 +37,6 @@ import org.spongepowered.api.network.status.StatusClient;
 import org.spongepowered.api.network.status.StatusResponse;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.text.serializer.LegacyTexts;
-import org.spongepowered.common.text.serializer.SpongeLegacyTextSerializer;
 import org.spongepowered.common.text.SpongeTexts;
 
 import java.net.InetSocketAddress;

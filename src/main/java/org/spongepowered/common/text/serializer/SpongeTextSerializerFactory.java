@@ -24,7 +24,7 @@
  */
 package org.spongepowered.common.text.serializer;
 
-import org.spongepowered.api.text.serializer.LegacyTextSerializer;
+import org.spongepowered.api.text.serializer.FormattingCodeTextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializerFactory;
 
 public final class SpongeTextSerializerFactory implements TextSerializerFactory {
@@ -35,8 +35,8 @@ public final class SpongeTextSerializerFactory implements TextSerializerFactory 
     }
 
     @Override
-    public LegacyTextSerializer getLegacyTextSerializer(char legacyChar) {
-        return new SpongeLegacyTextSerializer(legacyChar);
+    public FormattingCodeTextSerializer getFormattingCodeTextSerializer(char legacyChar) {
+        return new SpongeFormattingCodeTextSerializer(legacyChar);
     }
 
 }

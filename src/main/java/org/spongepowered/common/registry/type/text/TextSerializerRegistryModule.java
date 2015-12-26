@@ -33,7 +33,7 @@ import org.spongepowered.common.registry.RegistryModule;
 import org.spongepowered.common.registry.util.RegisterCatalog;
 import org.spongepowered.common.text.serializer.JsonTextSerializer;
 import org.spongepowered.common.text.serializer.PlainTextSerializer;
-import org.spongepowered.common.text.serializer.SpongeLegacyTextSerializer;
+import org.spongepowered.common.text.serializer.SpongeFormattingCodeTextSerializer;
 import org.spongepowered.common.text.serializer.xml.TextXmlTextSerializer;
 
 public final class TextSerializerRegistryModule implements RegistryModule {
@@ -41,8 +41,8 @@ public final class TextSerializerRegistryModule implements RegistryModule {
     @RegisterCatalog(TextSerializers.class)
     private static final ImmutableMap<String, TextSerializer> textSerializerMappings = ImmutableMap.<String, TextSerializer>builder()
             .put("plain", new PlainTextSerializer())
-            .put("legacy", new SpongeLegacyTextSerializer(COLOR_CHAR))
-            .put("color_code", new SpongeLegacyTextSerializer('&'))
+            .put("legacy", new SpongeFormattingCodeTextSerializer(COLOR_CHAR))
+            .put("formatting_code", new SpongeFormattingCodeTextSerializer('&'))
             .put("json", new JsonTextSerializer())
             .put("text_xml", new TextXmlTextSerializer())
             .build();

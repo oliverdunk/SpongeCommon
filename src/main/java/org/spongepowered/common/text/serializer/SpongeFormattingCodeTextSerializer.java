@@ -25,41 +25,41 @@
 package org.spongepowered.common.text.serializer;
 
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.LegacyTextSerializer;
+import org.spongepowered.api.text.serializer.FormattingCodeTextSerializer;
 
 import java.util.Locale;
 
-public final class SpongeLegacyTextSerializer implements LegacyTextSerializer {
+public final class SpongeFormattingCodeTextSerializer implements FormattingCodeTextSerializer {
 
-    private final char code;
+    private final char formattingChar;
 
-    public SpongeLegacyTextSerializer(char code) {
-        this.code = code;
+    public SpongeFormattingCodeTextSerializer(char formattingChar) {
+        this.formattingChar = formattingChar;
     }
 
     @Override
-    public char getChar() {
-        return this.code;
+    public char getCharacter() {
+        return this.formattingChar;
     }
 
     @Override
     public String serialize(Text text, Locale locale) {
-        return LegacyTexts.serialize(text, this.code, locale);
+        return LegacyTexts.serialize(text, this.formattingChar, locale);
     }
 
     @Override
     public Text parse(String input) {
-        return LegacyTexts.parse(input, this.code);
+        return LegacyTexts.parse(input, this.formattingChar);
     }
 
     @Override
     public String stripCodes(String text) {
-        return LegacyTexts.strip(text, this.code);
+        return LegacyTexts.strip(text, this.formattingChar);
     }
 
     @Override
     public String replaceCodes(String text, char to) {
-        return LegacyTexts.replace(text, this.code, to);
+        return LegacyTexts.replace(text, this.formattingChar, to);
     }
 
 }

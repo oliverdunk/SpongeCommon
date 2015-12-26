@@ -29,7 +29,7 @@ import org.spongepowered.api.text.serializer.SafeTextSerializer;
 
 import java.util.Locale;
 
-public class PlainTextSerializer implements SafeTextSerializer {
+public final class PlainTextSerializer implements SafeTextSerializer {
 
     @Override
     public String serialize(Text text, Locale locale) {
