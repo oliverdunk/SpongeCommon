@@ -195,7 +195,7 @@ public interface InventorySlot extends org.spongepowered.api.item.inventory.Slot
     }
 
     @Override
-    default Translation getName() {
+    default Translation getTranslation() {
         return new FixedTranslation("slot " + getSlotNumber());
     }
 
