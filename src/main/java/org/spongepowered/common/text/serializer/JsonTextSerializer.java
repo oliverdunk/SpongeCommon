@@ -24,15 +24,11 @@
  */
 package org.spongepowered.common.text.serializer;
 
-import static org.spongepowered.common.util.SpongeCommonTranslationHelper.t;
-
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextParseException;
 import org.spongepowered.api.text.serializer.TextSerializer;
-import org.spongepowered.api.util.TextMessageException;
 import org.spongepowered.common.interfaces.text.IMixinChatComponent;
 import org.spongepowered.common.interfaces.text.IMixinText;
 
@@ -42,16 +38,6 @@ import java.util.Locale;
  * TextSerializer implementation for the json format.
  */
 public final class JsonTextSerializer implements TextSerializer {
-
-    @Override
-    public String getId() {
-        return "minecraft:json";
-    }
-
-    @Override
-    public String getName() {
-        return "JsonTextSerializer";
-    }
 
     @Override
     public String serialize(Text text, Locale locale) {

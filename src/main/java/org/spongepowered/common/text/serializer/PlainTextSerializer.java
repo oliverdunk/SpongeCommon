@@ -24,14 +24,21 @@
  */
 package org.spongepowered.common.text.serializer;
 
-import org.spongepowered.api.text.serializer.LegacyTextSerializer;
-import org.spongepowered.api.text.serializer.TextSerializerFactory;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.SafeTextSerializer;
 
-public class SpongeTextSerializerFactory implements TextSerializerFactory {
+import java.util.Locale;
+
+public class PlainTextSerializer implements SafeTextSerializer {
 
     @Override
-    public LegacyTextSerializer getLegacyTextSerializer(char legacyChar) {
-        return new SpongeLegacyTextSerializer(legacyChar);
+    public String serialize(Text text, Locale locale) {
+        return text.toPlain(locale);
+    }
+
+    @Override
+    public Text parse(String input) {
+        return Text.of(input);
     }
 
 }

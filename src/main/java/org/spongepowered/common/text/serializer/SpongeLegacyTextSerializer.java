@@ -31,30 +31,10 @@ import java.util.Locale;
 
 public final class SpongeLegacyTextSerializer implements LegacyTextSerializer {
 
-    private final String id;
-    private final String name;
     private final char code;
 
     public SpongeLegacyTextSerializer(char code) {
         this.code = code;
-        this.id = "sponge:legacy:" + code; // TODO
-        this.name = "LegacyTextSerializer (" + code + ')';
-    }
-
-    public SpongeLegacyTextSerializer(String id, String name, char code) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-    }
-
-    @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
     }
 
     @Override

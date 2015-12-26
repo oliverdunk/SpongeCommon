@@ -24,13 +24,9 @@
  */
 package org.spongepowered.common.text.serializer.xml;
 
-import static org.spongepowered.common.util.SpongeCommonTranslationHelper.t;
-
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextParseException;
 import org.spongepowered.api.text.serializer.TextSerializer;
-import org.spongepowered.api.util.TextMessageException;
-import org.spongepowered.common.text.SpongeTexts;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
@@ -60,16 +56,6 @@ public class TextXmlTextSerializer implements TextSerializer {
             err.initCause(e);
             throw err;
         }
-    }
-
-    @Override
-    public String getId() {
-        return "sponge:textxml";
-    }
-
-    @Override
-    public String getName() {
-        return "TextXmlTextSerializer";
     }
 
     @Override

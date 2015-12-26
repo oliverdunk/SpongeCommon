@@ -42,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.common.interfaces.IMixinScoreboard;
 import org.spongepowered.common.interfaces.IMixinTeam;
-import org.spongepowered.common.registry.type.text.TextColorsRegistryModule;
+import org.spongepowered.common.registry.type.text.TextColorRegistryModule;
 import org.spongepowered.common.registry.type.scoreboard.VisibilityRegistryModule;
 import org.spongepowered.common.scoreboard.SpongeTeam;
 
@@ -157,7 +157,7 @@ public abstract class MixinScorePlayerTeam extends MixinTeam implements IMixinTe
     public void onSetChatFormat(EnumChatFormatting formatting, CallbackInfo ci) {
         if (this.shouldEcho()) {
             this.spongeTeam.allowRecursion = false;
-            this.spongeTeam.setColor(TextColorsRegistryModule.enumChatColor.get(formatting));
+            this.spongeTeam.setColor(TextColorRegistryModule.enumChatColor.get(formatting));
             this.spongeTeam.allowRecursion = true;
             ci.cancel();
         }
