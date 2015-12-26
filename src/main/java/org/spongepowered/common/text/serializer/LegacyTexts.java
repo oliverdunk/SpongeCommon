@@ -222,5 +222,4 @@ public final class LegacyTexts {
         return result.append(text, pos, text.length()).toString();
     }
 
-
 }

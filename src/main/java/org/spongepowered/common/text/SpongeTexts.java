@@ -33,6 +33,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.common.interfaces.text.IMixinChatComponent;
 import org.spongepowered.common.interfaces.text.IMixinText;
 
@@ -103,7 +104,7 @@ public final class SpongeTexts {
     public static List<Text> fromJson(List<String> json) {
         List<Text> list = Lists.newArrayList();
         for (String line : json) {
-           list.add(JSON.parse(line));
+           list.add(TextSerializers.JSON.parse(line));
         }
         return list;
     }
@@ -112,7 +113,7 @@ public final class SpongeTexts {
     public static List<Text> fromLegacy(NBTTagList legacy) {
         List<Text> list = Lists.newArrayList();
         for (int i = 0; i < legacy.tagCount(); i++) {
-            list.add(LEGACY.parse(legacy.getStringTagAt(i)));
+            list.add(TextSerializers.LEGACY.parse(legacy.getStringTagAt(i)));
         }
         return list;
     }

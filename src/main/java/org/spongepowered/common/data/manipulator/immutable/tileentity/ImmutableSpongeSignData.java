@@ -56,7 +56,7 @@ public class ImmutableSpongeSignData extends AbstractImmutableSingleListData<Tex
         return new MemoryDataContainer()
             .set(Keys.SIGN_LINES.getQuery(), this.getValue()
                 .stream()
-                .map(line -> line.to(JSON))
+                .map(TextSerializers.JSON::serialize)
                 .collect(Collectors.toList()));
     }
 

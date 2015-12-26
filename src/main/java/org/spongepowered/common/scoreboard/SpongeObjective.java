@@ -68,7 +68,7 @@ public class SpongeObjective implements Objective {
     @SuppressWarnings("deprecation")
     public static SpongeObjective fromScoreObjective(ScoreObjective scoreObjective) {
         SpongeObjective objective = new SpongeObjective(scoreObjective.getName(), (Criterion) scoreObjective.getCriteria());
-        objective.setDisplayName(LEGACY.parse(scoreObjective.getDisplayName()));
+        objective.setDisplayName(TextSerializers.LEGACY.parse(scoreObjective.getDisplayName()));
         objective.setDisplayMode((ObjectiveDisplayMode) (Object) scoreObjective.getRenderType());
         return objective;
     }

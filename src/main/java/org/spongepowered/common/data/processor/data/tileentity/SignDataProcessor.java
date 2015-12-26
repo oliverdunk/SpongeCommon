@@ -142,7 +142,7 @@ public class SignDataProcessor extends AbstractSpongeDataProcessor<SignData, Imm
         final List<Text> textLines = Lists.newArrayListWithCapacity(4);
         try {
             for (int i = 0; i < 4; i++) {
-                textLines.set(i, JSON.parse(lines.get(i)));
+                textLines.set(i, TextSerializers.JSON.parse(lines.get(i)));
             }
         } catch (Exception e) {
             throw new InvalidDataException("Could not deserialize text json lines", e);

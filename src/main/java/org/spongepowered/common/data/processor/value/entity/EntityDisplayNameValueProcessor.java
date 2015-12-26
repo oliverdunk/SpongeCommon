@@ -66,9 +66,9 @@ public class EntityDisplayNameValueProcessor extends AbstractSpongeValueProcesso
     @Override
     protected Optional<Text> getVal(Entity container) {
         if (container instanceof EntityPlayer) {
-            return Optional.of(LEGACY.parse(container.getCommandSenderName()));
+            return Optional.of(TextSerializers.LEGACY.parse(container.getCommandSenderName()));
         }
-        return Optional.of(LEGACY.parse(container.getCustomNameTag()));
+        return Optional.of(TextSerializers.LEGACY.parse(container.getCustomNameTag()));
     }
 
     @Override
