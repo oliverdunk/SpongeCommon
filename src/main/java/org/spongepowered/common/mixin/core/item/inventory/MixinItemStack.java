@@ -191,24 +191,6 @@ public abstract class MixinItemStack implements ItemStack, IMixinItemStack, IMix
     }
 
     @Override
-    public Text toText() {
-        Text.Builder builder;
-        Optional<DisplayNameData> optName = get(DisplayNameData.class);
-        if (optName.isPresent()) {
-            Value<Text> displayName = optName.get().displayName();
-            if (displayName.exists()) {
-                builder = displayName.get().builder();
-            } else {
-                builder = Text.builder(getTranslation());
-            }
-        } else {
-            builder = Text.builder(getTranslation());
-        }
-        builder.onHover(TextActions.showItem(this));
-        return builder.build();
-    }
-
-    @Override
     public ItemStackSnapshot createSnapshot() {
         return new SpongeItemStackSnapshot(this);
     }
