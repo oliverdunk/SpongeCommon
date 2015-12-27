@@ -67,10 +67,6 @@ public final class SpongeTexts {
         return ((IMixinChatComponent) component).toLegacy(code);
     }
 
-    private static String getLegacyFormatting(Text text) {
-        return ((IMixinText) text).getLegacyFormatting();
-    }
-
     @SuppressWarnings("unchecked")
     public static IChatComponent fixActionBarFormatting(IChatComponent component) {
         if (!component.getSiblings().isEmpty()) {
