@@ -154,7 +154,7 @@ public class SpongeCommandData extends AbstractData<CommandData, ImmutableComman
     }
 
     public SpongeCommandData setLastOutput(Text message) {
-        if (Texts.toPlain(checkNotNull(message, "Null message! Use empty text instead!")).isEmpty()) {
+        if (message.isEmpty()) {
             this.lastOutput = null;
         } else {
             this.lastOutput = message;
