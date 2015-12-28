@@ -22,15 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.common.mixin.core.scoreboard;
+package org.spongepowered.common.scoreboard;
 
-import net.minecraft.scoreboard.Team;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+public class SpongeScoreboardConstants {
 
-@Mixin(Team.class)
-public abstract class MixinTeam {
-
-    @Shadow public abstract boolean isSameTeam(Team other);
+    public static final int OBJECTIVE_PACKET_ADD = 0;
+    public static final int OBJECTIVE_PACKET_REMOVE = 1;
+    public static final int OBJECTIVE_PACKET_UPDATE = 2;
 
 }

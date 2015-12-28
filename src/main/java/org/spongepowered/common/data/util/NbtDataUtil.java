@@ -123,6 +123,9 @@ public final class NbtDataUtil {
     public static final String BOAT_OCCUPIED_DECELERATION_SPEED = "occupiedDecelerationSpeed";
     public static final String BOAT_UNOCCUPIED_DECELERATION_SPEED = "unoccupiedDecelerationSpeed";
 
+    public static final String SPONGE_SCORE_UUID_LEAST = "SpongeScoreUUIDLeast";
+    public static final String SPONGE_SCORE_UUID_MOST = "SpongeScoreUUIDMost";
+
 
     // Compatibility tags for Forge
     public static final String FORGE_DATA_TAG = "ForgeData";

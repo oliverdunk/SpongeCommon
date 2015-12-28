@@ -30,6 +30,7 @@ import net.minecraft.scoreboard.Scoreboard;
 import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMode;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,28 +56,33 @@ public abstract class MixinScoreObjective implements IMixinScoreObjective {
         this.spongeObjective = spongeObjective;
     }
 
-    @SuppressWarnings("deprecation")
     @Inject(method = "setDisplayName", at = @At("HEAD"), cancellable = true)
     public void onSetDisplayName(String name, CallbackInfo ci) {
-        if (this.shouldEcho()) {
-            this.spongeObjective.allowRecursion = false;
-            this.spongeObjective.setDisplayName(Texts.legacy().fromUnchecked(name));
-            this.spongeObjective.allowRecursion = true;
-            ci.cancel();
+        if (this.theScoreboard != null && ((IMixinScoreboard) this.theScoreboard).isClient()) {
+            return; // Let the normal logic take over.
         }
+
+        if (this.spongeObjective == null) {
+            System.err.println("Returning objective cause null!");
+            ci.cancel();
+            return;
+        }
+        this.spongeObjective.setDisplayName(Texts.legacy().fromUnchecked(name));
+        ci.cancel();
     }
 
     @Inject(method = "setRenderType", at = @At("HEAD"), cancellable = true)
     public void onSetRenderType(IScoreObjectiveCriteria.EnumRenderType type, CallbackInfo ci) {
-        if (this.shouldEcho()) {
-            this.spongeObjective.allowRecursion = false;
-            this.spongeObjective.setDisplayMode((ObjectiveDisplayMode) (Object) type);
-            this.spongeObjective.allowRecursion = true;
-            ci.cancel();
+        if (this.theScoreboard != null && ((IMixinScoreboard) this.theScoreboard).isClient()) {
+            return; // Let the normal logic take over.
         }
-    }
 
-    private boolean shouldEcho() {
-        return (((IMixinScoreboard) this.theScoreboard).echoToSponge() || (this.spongeObjective.getScoreboards().size() == 1)) && this.spongeObjective.allowRecursion;
+        if (this.spongeObjective == null) {
+            System.err.println("Returning render objective cause null!");
+            ci.cancel();
+            return;
+        }
+        this.spongeObjective.setDisplayMode((ObjectiveDisplayMode) (Object) type);
+        ci.cancel();
     }
 }
