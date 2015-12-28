@@ -38,6 +38,7 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S29PacketSoundEffect;
 import net.minecraft.network.play.server.S48PacketResourcePackSend;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -59,6 +60,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.chat.ChatType;
 import org.spongepowered.api.text.chat.ChatTypes;
+import org.spongepowered.api.text.sink.MessageSink;
+import org.spongepowered.api.text.sink.MessageSinks;
 import org.spongepowered.api.text.title.Title;
 import org.spongepowered.api.text.title.Titles;
 import org.spongepowered.api.util.Tristate;
@@ -81,6 +84,7 @@ import org.spongepowered.common.interfaces.IMixinEntityPlayerMP;
 import org.spongepowered.common.interfaces.IMixinPacketResourcePackSend;
 import org.spongepowered.common.interfaces.IMixinServerScoreboard;
 import org.spongepowered.common.interfaces.IMixinSubject;
+import org.spongepowered.common.interfaces.IMixinTeam;
 import org.spongepowered.common.interfaces.text.IMixinTitle;
 import org.spongepowered.common.interfaces.world.IMixinWorld;
 import org.spongepowered.common.text.SpongeTexts;
@@ -341,6 +345,25 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
     @Override
     public Text getTeamRepresentation() {
         return Texts.of(this.getName());
+    }
+
+    @Override
+    public MessageSink getDeathMessageSink() {
+        EntityPlayerMP player = (EntityPlayerMP) (Object) this;
+        if (player.worldObj.getGameRules().getGameRuleBooleanValue("showDeathMessages")) {
+            Team team = player.getTeam();
+
+            if (team != null && team.getDeathMessageVisibility() != Team.EnumVisible.ALWAYS) {
+                if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OTHER_TEAMS) {
+                    return ((IMixinTeam) team).getSinkForPlayer(player);
+                } else if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OWN_TEAM) {
+                    return ((IMixinTeam) team).getNonTeamSink();
+                }
+            } else {
+                return MessageSinks.toAll();
+            }
+        }
+        return MessageSinks.toNone();
     }
 
     @Override

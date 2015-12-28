@@ -199,7 +199,7 @@ public abstract class MixinScorePlayerTeam extends net.minecraft.scoreboard.Team
     public void team$addMember(Text member) {
         String legacyName = Texts.legacy().to(member);
         if (legacyName.length() > 16) {
-            throw new IllegalArgumentException(String.format("Membe ris %s characters long! It must be at most 16.", legacyName.length()));
+            throw new IllegalArgumentException(String.format("Member is %s characters long! It must be at most 16.", legacyName.length()));
         }
         if (this.theScoreboard != null) {
             this.theScoreboard.addPlayerToTeam(legacyName, this.registeredName);
@@ -335,7 +335,7 @@ public abstract class MixinScorePlayerTeam extends net.minecraft.scoreboard.Team
         for (int i = 0; i < MinecraftServer.getServer().getConfigurationManager().playerEntityList.size(); ++i) {
             EntityPlayerMP player = (EntityPlayerMP)MinecraftServer.getServer().getConfigurationManager().playerEntityList.get(i);
 
-            if (player.getTeam() != (Team)(Object)this) {
+            if (player.getTeam() != this) {
                 sources.add((Player) player);
             }
         }

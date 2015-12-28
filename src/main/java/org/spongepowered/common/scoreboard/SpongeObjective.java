@@ -245,79 +245,11 @@ public class SpongeObjective implements Objective {
         }
     }
 
-    // MORE OLD BAD CODE
-
-    /*@Override
-    public void addScore(Score score) throws IllegalArgumentException {
-        this.scores.put(score.getName(), score);
-
-        this.allowRecursion = false;
-        ((SpongeScore) score).addToObjective(this);
-        this.allowRecursion = true;
-    }
-
-    @Override
-    public Score getScore(Text name) {
-        if (this.scores.containsKey(name)) {
-            return this.scores.get(name);
-        }
-        SpongeScore score = new SpongeScore(name);
-        this.scores.put(score.getName(), score);
-
-        this.allowRecursion = false;
-        score.addToObjective(this);
-        this.allowRecursion = true;
-
-        return score;
-    }
-
-    @Override
-    public void removeScore(Score score) {
-        this.allowRecursion = false;
-        ((SpongeScore) score).removeFromObjective(this);
-        this.allowRecursion = true;
-
-        this.scores.remove(score.getName());
-    }
-
-    @SuppressWarnings("deprecation")
-    /*public void addScoreToScoreboard(net.minecraft.scoreboard.Scoreboard scoreboard, ScoreObjective objective) {
-        if (objective == null) {
-            objective = scoreboard.addScoreObjective(this.name, (IScoreObjectiveCriteria) this.criterion);
-            ((IMixinScoreObjective) objective).setSpongeObjective(this);
-        }
-
-        this.objectives.put(scoreboard, objective);
-
-        objective.setDisplayName(Texts.legacy().to(this.displayName));
-        objective.setRenderType((IScoreObjectiveCriteria.EnumRenderType) (Object) this.displayMode);
-        this.addScoresToObjective(objective);
-
-    }
-
-    public void removeFromScoreboard(net.minecraft.scoreboard.Scoreboard scoreboard) {
-        ScoreObjective objective = this.getObjective(scoreboard);
-        if (scoreboard.getObjective(objective.getName()) != null) {
-            scoreboard.removeObjective(objective);
-        }
-        this.objectives.remove(scoreboard);
-    }*/
-
-    /*private void addScoresToObjective(ScoreObjective objective) {
-        for (Score score: this.scores.values()) {
-            ((SpongeScore) score).addToScoreObjective(objective);
-        }
-    }*/
-
     @SuppressWarnings("unchecked")
     @Override
     public Set<Scoreboard> getScoreboards() {
         return (Set) new HashSet<>(this.objectives.keySet());
     }
-
-    /*public ScoreObjective getObjective(net.minecraft.scoreboard.Scoreboard scoreboard) {
-        return this.objectives.get(scoreboard);
-    }*/
 
     public Collection<ScoreObjective> getObjectives() {
         return this.objectives.values();

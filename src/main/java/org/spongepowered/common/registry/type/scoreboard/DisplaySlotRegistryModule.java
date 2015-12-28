@@ -35,6 +35,7 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.common.registry.CatalogRegistryModule;
 import org.spongepowered.common.registry.type.text.TextColorsRegistryModule;
 import org.spongepowered.common.registry.util.RegisterCatalog;
+import org.spongepowered.common.registry.util.RegistrationDependency;
 import org.spongepowered.common.scoreboard.SpongeDisplaySlot;
 import org.spongepowered.common.text.format.SpongeTextColor;
 
@@ -42,6 +43,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
+@RegistrationDependency(TextColorsRegistryModule.class)
 public final class DisplaySlotRegistryModule implements CatalogRegistryModule<DisplaySlot> {
 
     @RegisterCatalog(DisplaySlots.class)

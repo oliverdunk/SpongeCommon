@@ -235,6 +235,10 @@ public abstract class MixinScoreboardLogic extends Scoreboard implements IMixinS
 
         team.theScoreboard = this;
         this.teams.put(team.getRegisteredName(), team);
+
+        for (String entry: (Collection<String>) team.getMembershipCollection()) {
+            this.addPlayerToTeam(entry, team.getRegisteredName());
+        }
         this.broadcastTeamCreated(team);
     }
 

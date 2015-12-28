@@ -59,6 +59,9 @@ public class SpongeTeamBuilder implements Team.Builder {
     @Override
     public Team.Builder name(String name) {
         this.name = checkNotNull(name, "Name cannot be null!");
+        if (this.displayName == null) {
+            this.displayName = Texts.of(this.name);
+        }
         return this;
     }
 

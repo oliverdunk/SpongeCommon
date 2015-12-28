@@ -161,6 +161,7 @@
         "command.MixinCommandBlockSource",
         "command.MixinCommandExecuteAtSender",
         "command.MixinCommandHandler",
+        "command.MixinCommandScoreboard",
         "command.MixinCommandSource",
         "command.MixinICommandSender",
         "command.MixinLocatedSource",
